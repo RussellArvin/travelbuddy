@@ -15,6 +15,13 @@
       "when": 1707027598158,
       "tag": "0001_far_shockwave",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1707038863848,
+      "tag": "0002_broad_sasquatch",
+      "breakpoints": true
     }
   ]
 }
