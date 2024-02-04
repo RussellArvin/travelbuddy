@@ -11,6 +11,10 @@
   "dependencies": {
     "@clerk/clerk-sdk-node": "^4.13.7",
     "@clerk/nextjs": "^4.19.0",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.7",
+    "@mui/material": "^5.15.7",
     "@prisma/client": "^4.14.1",
     "@tanstack/react-query": "^4.33.0",
     "@trpc/client": "^10.27.1",
@@ -25,6 +29,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "superjson": "1.12.3",
+    "uuidv4": "^6.2.13",
     "zod": "^3.20.2"
   },
   "devDependencies": {
