@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { ItineraryItemType } from '../../../../utils/types';
+import { ItineraryItemType } from '../../../utils/types';
 
 
 export default function ItineraryItem({ id, location } :ItineraryItemType) {
