@@ -8,14 +8,15 @@ import { uuid } from "uuidv4";
 import { resumeChat, startChat } from "../utils/gpt";
 import OpenAI from "openai";
 
-export const userRouter = createTRPCRouter({
+export const planRouter = createTRPCRouter({
     findAll: protectedProcedure
     .query(async({ctx})=>{
         const planData = await db
         .select({
             id: plan.id,
             userId: plan.userId,
-            budget: plan.budget,
+            startBudget: plan.startBudget,
+            endBudget: plan.endBudget,
             startDate: plan.startDate,
             endDate: plan.endDate,
             rating: plan.rating
@@ -38,7 +39,8 @@ export const userRouter = createTRPCRouter({
             .select({
                 id: plan.id,
                 userId: plan.userId,
-                budget: plan.budget,
+                startBudget: plan.startBudget,
+                endBudget: plan.endBudget,
                 startDate: plan.startDate,
                 endDate: plan.endDate,
                 rating: plan.rating
@@ -55,7 +57,8 @@ export const userRouter = createTRPCRouter({
     create: protectedProcedure
     .input(
         z.object({
-            budget: z.number(),
+            startBudget: z.number(),
+            endBudget: z.number(),
             city: z.string(),
             startDate: z.date(),
             endDate: z.date(),
@@ -65,7 +68,8 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ctx,input})=>{
 
         const {
-            budget,
+            endBudget,
+            startBudget,
             city,
             startDate,
             endDate,
@@ -74,12 +78,32 @@ export const userRouter = createTRPCRouter({
 
         const planId = uuid();
 
-        const query = sql`INSERT INTO ${plan} (${plan.id}, ${plan.userId}, ${plan.budget}, ${plan.city}, ${plan.startDate}, ${plan.endDate}, ${plan.groupSize})
-        VALUES (${planId}, ${ctx.auth.userId},${budget}, ${city}, ${startDate}, ${endDate}, ${groupSize})`
+        const rawData = await db.insert(plan)
+        .values({
+            // @ts-ignore
+            id: planId,
+            userId: ctx.auth.userId,
+            startBudget,
+            endBudget,
+            city,
+            startDate,
+            endDate,
+            groupSize
+        })
 
-        await db.execute(query);
+        // const query = sql`INSERT INTO plans (${plan.id}, ${plan.userId}, ${plan.startBudget}, ${plan.endBudget}, ${plan.city}, ${plan.startDate}, ${plan.endDate}, ${plan.groupSize})
+        // VALUES (${planId}, ${ctx.auth.userId},${startBudget}, ${endBudget} ${city}, ${startDate}, ${endDate}, ${groupSize})`
+
+
+        try{
+            //await db.execute(query);
 
         return planId
+        }
+        catch(e){
+            console.log(e)
+            throw e
+        }
     }),
     chat:protectedProcedure
     .input(z.object({
@@ -91,8 +115,8 @@ export const userRouter = createTRPCRouter({
             .select({
                 id: plan.id,
                 userId: plan.userId,
-                startBudget: plan.budget,
-                endBudget: plan.budget,
+                startBudget: plan.startBudget,
+                endBudget: plan.endBudget,
                 startDate: plan.startDate,
                 endDate: plan.endDate,
                 groupSize: plan.groupSize,

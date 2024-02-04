@@ -20,7 +20,8 @@ export const user = pgTable("users",{
 export const plan = pgTable("plans",{
     id: uuid("id").primaryKey().notNull(),
     userId: text("user_id").notNull().references(() => user.id),
-    budget: integer("budget").notNull(),
+    startBudget: integer("start_budget").notNull(),
+    endBudget: integer("end_budget").notNull(),
     city: text("city").notNull(),
     startDate:date("start_date").notNull(),
     endDate:date("end_date").notNull(),

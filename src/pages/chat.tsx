@@ -6,25 +6,41 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import { Box, Typography, TextField, MenuItem, Menu, Autocomplete, Button } from "@mui/material";
 import toast from "react-hot-toast"
+import { api } from "../utils/api";
 
 const Chat: NextPage = () => {
     const [city, setCity] = useState('');
     const [paxNo, setPaxNo] = useState(1);
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const [startBudget, setStartBudget] = useState(0);
     const [endBudget, setEndBudget] = useState(0);
 
+    const {
+        mutate: createPlanMutation,
+        isLoading: isCreatePlanLoading
+    } = api.plan.create.useMutation()
+
     const onSubmit = () => {
-        const submitedData = {
-            city,
-            paxNo,
-            startDate,
-            endDate,
-            startBudget,
-            endBudget
-        }
-        console.log(submitedData);
+
+        createPlanMutation(
+            {
+              startBudget,
+              endBudget,
+              city,
+              startDate,
+              endDate,
+              groupSize: paxNo
+            },
+            {
+              onSuccess: (checkoutUrl) => {
+                toast.success("CREATED!")
+              },
+              onError: (error) => {
+                console.log(error);
+              },
+            },
+          );
     }
 
     const cityInfo = [
