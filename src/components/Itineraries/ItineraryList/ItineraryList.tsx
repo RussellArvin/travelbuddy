@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import ItineraryItem from '../ItineraryItem/ItineraryItem';
-import { ItineraryItemType } from '../../../../utils/types';
+import { ItineraryItemType } from '../../../utils/types';
 
 
 const Item = styled(Paper)(({ theme }) => ({

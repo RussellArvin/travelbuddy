@@ -1,0 +1,42 @@
+import React from 'react';
+import { Card, Typography, CardContent } from '@mui/material';
+
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+interface ChatMessageProps {
+  message: Message;
+}
+
+const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
+  const isUser = message.role === 'user';
+
+  const userStyle = {
+    margin: '10px',
+    backgroundColor: '#e0f7fa',
+    alignSelf: 'flex-end',
+  };
+
+  const assistantStyle = {
+    margin: '10px',
+    backgroundColor: '#ffe0b2',
+    alignSelf: 'flex-start',
+  };
+
+  return (
+    <Card style={isUser ? userStyle : assistantStyle}>
+      <CardContent>
+        <Typography color="textSecondary" gutterBottom>
+          {isUser ? 'You' : 'Assistant'}
+        </Typography>
+        <Typography variant="body2" component="p">
+          {message.content}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default ChatMessage;
