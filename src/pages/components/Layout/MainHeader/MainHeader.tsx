@@ -31,26 +31,8 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ toggleNav }) => {
     setAnchorEl(null);
   };
 
-
-
-  // useEffect(() => {
-  //   console.log(toggleNavbar);
-  // },[toggleNavbar])
-
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/* <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? 'bob' : 'Login'}
-        />
-      </FormGroup> */}
       <AppBar position="static">
         <Toolbar>
           <IconButton

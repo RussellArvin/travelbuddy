@@ -11,7 +11,6 @@ export const useSeedNewUser = (args: useSeedNewUserArgs) => {
     const { mutate: userRegisterMutation } = api.user.register.useMutation();
 
     return useEffect(() => {
-      console.log(userData)
         if (!userData && !userDataIsLoading) {
           userRegisterMutation();
         }
