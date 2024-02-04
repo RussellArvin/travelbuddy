@@ -10,6 +10,7 @@ export const serverSchema = z.object({
   CLERK_SECRET_KEY: z.string(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   INITIAL_PROMPT: z.string(),
+  OPENAI_API_KEY: z.string(),
 });
 
 /**
@@ -18,6 +19,7 @@ export const serverSchema = z.object({
  * @type {{ [k in keyof z.input<typeof serverSchema>]: string | undefined }}
  */
 export const serverEnv = {
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   DATABASE_URL: process.env.DATABASE_URL,
   CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
   NODE_ENV: process.env.NODE_ENV,
