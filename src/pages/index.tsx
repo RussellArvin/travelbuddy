@@ -3,13 +3,9 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { api } from "../utils/api";
-import { useSeedNewUser } from "../hooks/use-seed-new-user";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const { data: userData, isLoading: userDataIsLoading } = api.user.get.useQuery();
-
-  useSeedNewUser({ data: userData, isLoading: userDataIsLoading });
 
   return (
     <>

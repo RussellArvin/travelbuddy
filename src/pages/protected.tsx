@@ -1,7 +1,13 @@
 import { UserButton } from "@clerk/nextjs";
 import { type NextPage } from "next";
+import { useSeedNewUser } from "../hooks/use-seed-new-user";
+import { api } from "../utils/api";
 
 const Protected: NextPage = () => {
+  const { data: userData, isLoading: userDataIsLoading } = api.user.get.useQuery();
+
+  useSeedNewUser({ data: userData, isLoading: userDataIsLoading });
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
