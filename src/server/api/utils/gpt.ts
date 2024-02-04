@@ -2,7 +2,7 @@ import OpenAI from "openai"
 import { db } from "../../db";
 import { conversation } from "../../db/schema";
 
-const openai = new OpenAI({ apiKey: 'My API Key' })
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! })
 
 type ChatMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 type ChatRole = ChatMessage["role"]
