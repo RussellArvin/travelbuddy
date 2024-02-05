@@ -163,7 +163,7 @@ const Chat: NextPage = () => {
                         </Grid>
                         <Grid item xs={11} />
                         <Grid item xs={1} sx={{ marginTop: "2vh" }}>
-                            <Button variant="contained" onClick={onSubmit}>Submit</Button>
+                            <Button variant="outlined" onClick={onSubmit}>Submit</Button>
                         </Grid>
                     </Grid>
                 </Box>

@@ -7,7 +7,7 @@ import { ItineraryItemType } from '../../../utils/types';
 import { uuid } from 'uuidv4';
 import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
-
+import { useRouter } from 'next/router';
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#427AA1' : '##427AA1',
     ...theme.typography.body2,
@@ -26,11 +26,16 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function ItineraryList({ itineraries }: { itineraries: ItineraryItemType[] }) {
+    const router = useRouter()
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 <Grid item xs={4} md={4}>
-                    <Item>
+                    <Item
+                    onClick={()=>{
+                        router.push('/chat')
+                    }}>
                         <Card sx={{ width: "30vw", height: "300px",}}>
                             <CardContent>
                                 <AddIcon sx={{ fontSize:"15vw"}} />

@@ -9,7 +9,7 @@ export default function DayItem({ dayItem }: { dayItem: PlanItem }) {
     const { activity, startDate, endDate, isHalal, location, imgUrl } = dayItem;
 
     const changeDateFormat = (date: Date) => {
-        let hours: number = date.getUTCHours();
+        let hours: number = date.getHours();
 
         // Determine AM or PM suffix
         const amPm: string = hours >= 12 ? 'PM' : 'AM';
