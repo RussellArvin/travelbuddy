@@ -4,6 +4,7 @@ import { Container, TextField, Button, Box } from '@mui/material';
 import { NextPage } from 'next';
 import { api, RouterOutputs } from '../../../utils/api';
 import { useRouter } from 'next/router';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 type Message = RouterOutputs["plan"]["getChatHistory"]
   
@@ -33,13 +34,7 @@ type Message = RouterOutputs["plan"]["getChatHistory"]
             setMessages(chatMessages)
         }
     })
-
-    if(isChatMessagesLoading || !chatMessages || isSendChatLoading) return (
-        <>
-        <h1>Loading</h1>
-        </>
-    )
-  
+      
     const sendMessage = () => {
       if (inputValue.trim() !== '') {
         sendChatMutation(
@@ -63,6 +58,7 @@ type Message = RouterOutputs["plan"]["getChatHistory"]
   
     return (
       <Container>
+        {(isChatMessagesLoading || isSendChatLoading) && <LoadingSpinner isLoading={isChatMessagesLoading || isSendChatLoading} />}
         <ChatWindow messages={messages} />
         <Box
           sx={{
