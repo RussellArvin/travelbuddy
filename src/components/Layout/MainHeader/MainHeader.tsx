@@ -39,7 +39,6 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ toggleNav }) => {
       // Check the path part of the URL
       const path = window.location.pathname;
       setCurrentPath(path);
-      console.log("Setting current path:", path);
     }
   }, []); // Empty dependency array to run the effect only once
 
