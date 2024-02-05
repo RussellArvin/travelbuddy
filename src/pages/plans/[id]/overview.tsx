@@ -66,6 +66,21 @@ const Overview: NextPage = () => {
         ["Tokyo", "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"],
     ]);
 
+    const formatDate = (date: Date): string => {
+        // Extract the parts of the date
+        let day: string | number = date.getDate();
+        let month: string | number = date.getMonth() + 1; // getMonth() returns month from 0 to 11
+        let year: string = date.getFullYear().toString().substr(-2); // Get last two digits of the year
+      
+        // Format the day and month to ensure they are in 'MM' or 'DD' format
+        day = (day < 10 ? '0' : '') + day;
+        month = (month < 10 ? '0' : '') + month;
+      
+        // Combine the parts into the final format
+        return `${month}/${day}/${year}`;
+    }
+      
+
     return (
         <Fragment>
             <MainHeader toggleNav={handleNavigationOnClick} />
@@ -77,7 +92,7 @@ const Overview: NextPage = () => {
                         </Box>
                         <List style={tripDetailItemStyle} aria-label="Trip details">
                             <ListItem>Trip to {planData.city}</ListItem>
-                            <ListItem>11/3/22 - 11/5/22</ListItem>
+                            <ListItem>{formatDate(new Date(planData.startDate))}- {formatDate(new Date(planData.endDate))}</ListItem>
                             <ListItem>{planData.groupSize} Pax</ListItem>
                             <ListItem>Budget: ${planData.startBudget}-{planData.endBudget}</ListItem>
                         </List>
