@@ -50,6 +50,20 @@
       "when": 1707104968783,
       "tag": "0006_last_echo",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1707118394958,
+      "tag": "0007_normal_chronomancer",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1707118460752,
+      "tag": "0008_lucky_eddie_brock",
+      "breakpoints": true
     }
   ]
 }

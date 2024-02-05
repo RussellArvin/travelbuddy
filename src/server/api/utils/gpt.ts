@@ -1,6 +1,7 @@
 import OpenAI from "openai"
 import { db } from "../../db";
 import { conversation, planItems } from "../../db/schema";
+import { getImgOfPlace } from "./googlePlaces";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! })
 
@@ -29,22 +30,22 @@ export const startChat = async (plan: Plan): Promise<string> => {
        }
    ]
 
-   return await createCompletion(messages,plan.id)
+   return await createCompletion(messages,plan.id,plan.city)
 
 }
 
-export const resumeChat = async (messages:ChatMessage[], reply:string, planId:string): Promise<string> => {
+export const resumeChat = async (messages:ChatMessage[], reply:string, planId:string, city: string): Promise<string> => {
 
     messages.push({
         role:"user",
         content:reply
     })
 
-    return await createCompletion(messages,planId)
+    return await createCompletion(messages,planId,city)
 }
 
 
-const createCompletion = async (messages: ChatMessage[], planId: string) => {
+const createCompletion = async (messages: ChatMessage[], planId: string, city: string) => {
     const completion  = await openai.chat.completions.create({
         messages,
     //model: "gpt-3.5-turbo",
@@ -53,20 +54,19 @@ const createCompletion = async (messages: ChatMessage[], planId: string) => {
     })
 
     const reply = completion.choices[0]?.message.content!
-    console.log(reply)
+
 
     await Promise.all([
         insertChatToDB("user",messages[messages.length-1]?.content as string,planId),
         insertChatToDB("assistant",reply,planId),
     ])
 
-    console.log("Items saved!")
 
     const jsonRegex = /```json\n([\s\S]*?)\n```/;
 
     const match = reply.match(jsonRegex)
 
-    if(match) saveItems(reply,planId)
+    if(match) saveItems(reply,planId,city)
 
     return reply
 }
@@ -81,8 +81,7 @@ const insertChatToDB = async (role: ChatRole, content: string, planId: string) =
 }
 
 
-const saveItems = async (rawData: string, planId: string) => {
-    console.log("HERE IS WHEN THE THING IS BEING SAVED")
+const saveItems = async (rawData: string, planId: string, city: string) => {
     const jsonRegex = /```json\n([\s\S]*?)\n```/;
 
     const match = rawData.match(jsonRegex)
@@ -91,7 +90,7 @@ const saveItems = async (rawData: string, planId: string) => {
 
     const activities: Activity[] = JSON.parse(match[1]);
 
-    const insertValues = activities.map(({activity,day,startDateTime,endDateTime,location,isHalal})=>{
+    const insertValuesPromises = activities.map(async({activity,day,startDateTime,endDateTime,location,isHalal})=>{
         return {
             planId,
             activity,
@@ -99,9 +98,12 @@ const saveItems = async (rawData: string, planId: string) => {
             location,
             isHalal,
             startDate: startDateTime,
-            endDate: endDateTime
+            endDate: endDateTime,
+            imgUrl: await getImgOfPlace(`${location} ${city}`)
         }
     })
+
+    const insertValues = await Promise.all(insertValuesPromises)
 
     await db.insert(planItems).values(insertValues)
     return;
