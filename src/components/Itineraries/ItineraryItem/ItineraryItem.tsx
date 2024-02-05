@@ -9,6 +9,7 @@ import { ItineraryItemType } from '../../../utils/types';
 import { styled } from '@mui/material/styles';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import cityImages from '../../../utils/cityImages';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#427AA1' : '##427AA1',
@@ -16,17 +17,14 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
+  display: "flex",
+  justifyContent: "center",
   margin: "1vw",
   cursor: "pointer",
+  "&:hover": {
+    boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.2)",  // Add box shadow on hover
+},
 }));
-
-const cityImages = new Map([
-  ["Jakarta", "https://s7g10.scene7.com/is/image/barcelo/things-to-do-in-jakarta_jakarta-tourist-spots?&&fmt=webp-alpha&qlt=75&wid=1300&fit=crop,1"],
-  ["New York", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/800px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg"],
-  ["Seoul", "https://static.independent.co.uk/2022/12/29/14/iStock-464629385.jpg"],
-  ["Taipei", "https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Taipei_CP1125X624_1.jpg"],
-  ["Tokyo", "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"],
-]);
 
 
 
@@ -36,9 +34,9 @@ export default function ItineraryItem(details: ItineraryItemType) {
   return (
     <Grid item xs={4} md={4}>
       <Item>
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 500, height: "300px" }}>
           <CardMedia
-            sx={{ height: 160 }}
+            sx={{ height: 160 , width: "30vw"}}
             image={cityImages.get(location)}
             title="city"
           />
@@ -46,7 +44,7 @@ export default function ItineraryItem(details: ItineraryItemType) {
             <Typography gutterBottom variant="h5" component="div">
               {location}
             </Typography>
-            <Container sx={{ display: "flex", }}>
+            <Container sx={{ display: "block", }}>
               <Typography variant="body2" color="text.secondary">
                 Budget: ${startBudget}-{endBudget}
               </Typography>

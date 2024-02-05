@@ -13,9 +13,10 @@ const AddReview = (props: AddReviewProps) => {
 
     const [reviewDetails, setReviewDetails] = useState("");
     const mainContainerStyle = {
-        border: "1px solid black",
-        margin: "2px 0 5px 0",
+        border: "1px solid #05668D",
+        margin: "2px 0 30px 0",
         padding: "10px",
+        backgroundColor: "#EBF2FA",
     }
 
     return <Card sx={mainContainerStyle}>

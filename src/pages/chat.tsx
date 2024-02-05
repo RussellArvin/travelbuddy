@@ -48,8 +48,10 @@ const Chat: NextPage = () => {
 
     const cityInfo = [
         { label: 'Jakarta' },
+        { label: 'London' },
         { label: 'New York' },
-        { label: 'Hall 10' },
+        { label: 'Seoul' },
+        { label: 'Taipei' },
     ];
 
     return (
