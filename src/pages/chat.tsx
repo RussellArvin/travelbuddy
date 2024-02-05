@@ -109,7 +109,6 @@ const Chat: NextPage = () => {
                                         // check difference in dates
                                         if (endDate != null) {
                                             const differenceInDays = (endDate - startDateObj) / (1000 * 60 * 60 * 24);
-                                            console.log(differenceInDays);
                                         }
 
                                         // else {
@@ -132,10 +131,8 @@ const Chat: NextPage = () => {
                                         // check difference in dates
                                         if (startDate != null) {
                                             const differenceInDays = (endDateObj - startDate) / (1000 * 60 * 60 * 24);
-                                            console.log(differenceInDays);
                                         }
                                         // }
-                                        console.log(endDateVal);
                                         setEndDate(endDateObj);
                                     }}
                                 />

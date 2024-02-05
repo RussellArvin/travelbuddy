@@ -145,7 +145,6 @@ htmlData += `</div></div>
             format:'A4'
         }).toBuffer((err, buffer) => {
             if (err) {
-                console.error(err);
                 reject(err); // Reject the Promise if there's an error
             } else {
                 const base64String = buffer.toString('base64');
