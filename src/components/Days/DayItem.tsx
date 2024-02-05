@@ -7,15 +7,18 @@ import { RouterOutputs } from "../../utils/api";
 
 export default function DayItem({ dayItem }: { dayItem: PlanItem }) {
     const { activity, startDate, endDate, isHalal, location, imgUrl } = dayItem;
-    console.log(dayItem)
 
-    const changeDateFormat = (inputTime: string) => {
-        console.log(inputTime)
-        //console.log(typeof inputTime)
-        const WithZeroOffset = inputTime.replace(/([+-])(\d:\d\d)/, "$10$2");
-        const time = new Date(WithZeroOffset);
-        const formattedTime = new Intl.DateTimeFormat('en-US', { hour: 'numeric', hour12: true }).format(time);
-        return formattedTime;
+    const changeDateFormat = (date: Date) => {
+        let hours: number = date.getUTCHours();
+
+        // Determine AM or PM suffix
+        const amPm: string = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert 24h time to 12h time format
+        hours = hours % 12 || 12;
+
+        // Return the formatted string
+        return `${hours}${amPm}`;
     };
 
     return (
@@ -27,9 +30,9 @@ export default function DayItem({ dayItem }: { dayItem: PlanItem }) {
                     </Grid>
                     <Grid item xs={7}>
                         <h1>{activity}</h1>
-                        <h1>start time: {changeDateFormat(new Date(startDate).toISOString())}</h1>
-                        <h1>end time: {changeDateFormat(new Date(endDate).toISOString())}</h1>
-                        {{ isHalal } && <h1>isHalal</h1>}
+                        <h1>start time: {changeDateFormat(startDate)}</h1>
+                        <h1>end time: {changeDateFormat(endDate)}</h1>
+                        { isHalal && <h1>isHalal</h1>}
                         <h1>location: {location}</h1>
                     </Grid>
                 </Grid>

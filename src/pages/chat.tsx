@@ -51,10 +51,7 @@ const Chat: NextPage = () => {
         { label: 'New York' },
         { label: 'Hall 10' },
     ];
-<<<<<<< HEAD
-=======
-   
->>>>>>> main
+
     return (
         <Box>
             <Typography variant="h4" align="center">Select Options</Typography>
