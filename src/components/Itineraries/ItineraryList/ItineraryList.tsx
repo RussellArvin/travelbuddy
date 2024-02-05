@@ -1,44 +1,58 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import { Paper, Card, CardMedia , Typography, Container, CardContent} from '@mui/material';
 import ItineraryItem from '../ItineraryItem/ItineraryItem';
 import { ItineraryItemType } from '../../../utils/types';
-
+import { uuid } from 'uuidv4';
+import { styled } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
 
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    backgroundColor: theme.palette.mode === 'dark' ? '#427AA1' : '##427AA1',
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: 'center',
+    display:"flex",
+    justifyContent: "center",
     color: theme.palette.text.secondary,
-}));
+    margin: "1vw",
+    cursor: "pointer",
+    transition: "box-shadow 0.3s",  // Add transition for a smooth effect
+    "&:hover": {
+        boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.2)",  // Add box shadow on hover
+    },
+  }));
 
-const DUMMY_ARR: ItineraryItemType[] = [{id: 1, location: "Jakarta"},{id: 3, location: "BOb"},{id: 2, location: "pop"},{id: 4, location: "dog"}];
 
-// const DUMMY_ARR2 = [
-//     {id: "m1", location:""}
-// ]
-
-const itineraries = DUMMY_ARR.map((itinerary: ItineraryItemType) => (
-    <Grid item xs={4} md={4} key={itinerary.id}>
-      <Item>
-        <ItineraryItem  
-            id={itinerary.id}
-            location={itinerary.location}
-        />
-      </Item>
-    </Grid>
-  ));
-  
-
-export default function ItineraryList() {
+export default function ItineraryList({ itineraries }: { itineraries: ItineraryItemType[] }) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
-                {itineraries}
+                <Grid item xs={4} md={4}>
+                    <Item>
+                        <Card sx={{ width: "30vw", height: "300px",}}>
+                            <CardContent>
+                                <AddIcon sx={{ fontSize:"15vw"}} />
+                                <Typography gutterBottom variant="h5" component="div">
+                                    generate a new Itinerary
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Item>
             </Grid>
-        </Box>
+            {itineraries.map((itinerary: ItineraryItemType) => (
+                <ItineraryItem
+                    id={itinerary.id}
+                    userId={itinerary.userId}
+                    location={itinerary.location}
+                    startBudget={itinerary.startBudget}
+                    endBudget={itinerary.endBudget}
+                    duration={itinerary.duration}
+                    groupSize={itinerary.groupSize}
+                />
+            ))}
+        </Grid>
+        </Box >
     );
 }

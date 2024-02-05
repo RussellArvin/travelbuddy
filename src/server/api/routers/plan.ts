@@ -7,7 +7,6 @@ import { conversation, plan, planItems } from "../../db/schema";
 import { uuid } from "uuidv4";
 import { resumeChat, startChat } from "../utils/gpt";
 import OpenAI from "openai";
-import { PgBooleanBuilder } from "drizzle-orm/pg-core";
 
 export const planRouter = createTRPCRouter({
     findAll: protectedProcedure
@@ -16,11 +15,11 @@ export const planRouter = createTRPCRouter({
         .select({
             id: plan.id,
             userId: plan.userId,
+            location: plan.city,
             startBudget: plan.startBudget,
             endBudget: plan.endBudget,
-            startDate: plan.startDate,
-            endDate: plan.endDate,
-            rating: plan.rating
+            duration: sql`${plan.endDate} - ${plan.startDate}`.mapWith(Number),
+            groupSize: plan.groupSize,
         })
         .from(plan)
 

@@ -24,20 +24,10 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ toggleNav }) => {
   }, []); // Empty dependency array to run the effect only once
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1}}>
       <AppBar position="static">
-        <Toolbar>
-          <Container sx={{justifyContent: "flex-start", display:"flex", alignItems: "center"}}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              onClick={toggleNav}
-            >
-              <MenuIcon />
-            </IconButton>
+        <Toolbar sx={{backgroundColor: "#05668D"}}>
+          <Container sx={{justifyContent: "flex-start", display:"flex", alignItems: "center", }}>
             {/* <Typography variant="h5" component="div" onClick={() => {
             
           }} sx={{ flexGrow: 1, cursor: "pointer" }}>
@@ -52,7 +42,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ toggleNav }) => {
                   window.open("https://www.singtel.com/personal/products-services/mobile/roaming/all-plans", "_blank")
                 }}
                 sx={{
-                  margin: "0 2vw 0 2vw", cursor: "pointer", '&:hover': {
+                  margin: "0 2vw 0 vw", cursor: "pointer", '&:hover': {
                     color: 'blue', // Change to the desired hover color
                   },
                 }}>Find Mobile Plans</Typography>}

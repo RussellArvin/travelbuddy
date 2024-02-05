@@ -41,7 +41,7 @@ const Chatbot: NextPage = () => {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
         />
-        <Button variant="contained" color="primary" onClick={sendMessage} sx={{ marginLeft: '10px' }}>
+        <Button variant="outlined" color="primary" onClick={sendMessage} sx={{ marginLeft: '10px' }}>
           Send
         </Button>
       </Box>

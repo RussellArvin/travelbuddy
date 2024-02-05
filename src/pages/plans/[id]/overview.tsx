@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Container, TextField, Button, Box, Grid, List, ListItem } from '@mui/material';
+import { Container, TextField, Button, Box, Grid, List, ListItem, Card } from '@mui/material';
 import { NextPage } from 'next';
 import { api, RouterOutputs } from '../../../utils/api'
 import { useRouter } from 'next/router';
@@ -7,24 +7,70 @@ import { MainHeader } from '../../../components/Layout/MainHeader/MainHeader';
 import Day from '../../../components/Days/Day';
 import { uuid } from "uuidv4";
 import { PlanItem } from '../../../utils/types';
-
-
+import ReviewsList from '../../../components/Reviews/ReviewsList';
+import AddReview from '../../../components/Reviews/AddReview';
+<<<<<<< HEAD
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import cityImages from '../../../utils/cityImages';
+=======
+import cityImages from '../../../utils/cityImages';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+>>>>>>> d4d2e9c (feat: added generate new Itinerary on mainpage)
 
 const Overview: NextPage = () => {
     const router = useRouter()
+    const reviewContext = api.useUtils().review
+    // toggle navbar state
+    const [toggleNavbar, setToggleNavBar] = useState(false)
+
+
+    // check if need to can Review
+    const [canAddReview, setCanAddReview] = useState(true);
     const { data: planData, isLoading: isPlanDataLoading } = api.plan.getFullPlan.useQuery({
         id: router.query.id as string
     }, {
         enabled: router.isReady
     })
 
+    const { data: reviewData, isLoading: isReviewsLoading } = api.review.getPlanReviews.useQuery({
+        planId: router.query.id as string
+    }, {
+        enabled: router.isReady
+    })
+
+    const {
+        mutate: saveReviewMutation,
+        isLoading: isSaveReviewLoading
+    } = api.review.create.useMutation()
 
 
-    // toggle navbar state
-    const [toggleNavbar, setToggleNavBar] = useState(false)
+    useEffect(()=> {
+        if(reviewData){
+            setCanAddReview(!reviewData.hasReviewed)
+        }
+    })
+
+    const [currentDay, setCurrentDay] = useState(1);
 
     const handleNavigationOnClick = () => {
         setToggleNavBar(!toggleNavbar);
+    }
+
+    const handleAddReview = (content: string, rating: number)=> {
+        saveReviewMutation({
+            planId: router.query.id as string,
+            content,
+            rating
+        },
+        {
+        onSuccess: () => {
+            reviewContext.getPlanReviews.invalidate()
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+          },)
     }
 
     const tripDetailItemStyle = {
@@ -34,10 +80,10 @@ const Overview: NextPage = () => {
         backgroundColor: 'background.paper',
     };
 
-    if(isPlanDataLoading || !planData){
+    if(!planData){
         return (
             <>
-            <h1>Loading</h1>
+            <LoadingSpinner isLoading={true} ></LoadingSpinner>
             </>
         )
     }
@@ -53,42 +99,56 @@ const Overview: NextPage = () => {
         },
         []
     );
+        
+    const setCurrentDayHandler = (action: string) => {
+        let dayNum = currentDay;
+    
+        if (action === "increment" && dayNum < groupedByDay.length) {
+            setCurrentDay((prev) => prev + 1);
+        } else if (action === "decrement" && dayNum > 1) {
+            setCurrentDay((prev) => prev - 1);
+        }
+    }
 
-    const daysDisplayed = groupedByDay.map((item: PlanItem[]) => (
-        <Day key={uuid()} dayItems={item} />
-    ));
+    // const daysDisplayed = groupedByDay.map((item: PlanItem[]) => (
+    //     <Day key={uuid()} dayItems={item} />
+    // ));
 
-    const countryImages = new Map([
-        ["Jakarta", "https://s7g10.scene7.com/is/image/barcelo/things-to-do-in-jakarta_jakarta-tourist-spots?&&fmt=webp-alpha&qlt=75&wid=1300&fit=crop,1"],
-        ["New York", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/800px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg"],
-        ["Seoul", "https://static.independent.co.uk/2022/12/29/14/iStock-464629385.jpg"],
-        ["Taipei", "https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Taipei_CP1125X624_1.jpg"],
-        ["Tokyo", "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"],
-    ]);
+    const dayDisplayed = <Day key={uuid()} dayItems={groupedByDay[currentDay - 1]} />
+
+
 
     const formatDate = (date: Date): string => {
         // Extract the parts of the date
         let day: string | number = date.getDate();
         let month: string | number = date.getMonth() + 1; // getMonth() returns month from 0 to 11
         let year: string = date.getFullYear().toString().substr(-2); // Get last two digits of the year
-      
+
         // Format the day and month to ensure they are in 'MM' or 'DD' format
         day = (day < 10 ? '0' : '') + day;
         month = (month < 10 ? '0' : '') + month;
-      
+
         // Combine the parts into the final format
         return `${month}/${day}/${year}`;
     }
-      
+
+    const DUMMY_REVIEWS = [
+        { id: "m1", username: "Donald", content: "this place damn solid bro", rating: 5 },
+        { id: "m2", username: "Bob", content: "this sucks bro", rating: 4 },
+        { id: "m3", username: "Sarah", content: "very solid bro", rating: 3 },
+        { id: "m4", username: "Gary", content: "very dope and solid sis", rating: 3 },
+        { id: "m5", username: "Poppy", content: "I love food here", rating: 5 },
+        { id: "m6", username: "Tiny", content: "take me to church pls", rating: 2 },
+    ]
 
     return (
         <Fragment>
             <MainHeader toggleNav={handleNavigationOnClick} />
             <Container sx={{ margin: "1vw 2vw 0 2vw", }}>
                 <Grid container>
-                    <Grid item xs={4} sx={{ border: "2px solid black" }}>
+                    <Grid item xs={5} sx={{}}>
                         <Box sx={{ height: "256px", width: "100%" }}>
-                            <img src={countryImages.get(planData.city)}></img>
+                            <img src={cityImages.get(planData.city)}></img>
                         </Box>
                         <List style={tripDetailItemStyle} aria-label="Trip details">
                             <ListItem>Trip to {planData.city}</ListItem>
@@ -96,12 +156,19 @@ const Overview: NextPage = () => {
                             <ListItem>{planData.groupSize} Pax</ListItem>
                             <ListItem>Budget: ${planData.startBudget}-{planData.endBudget}</ListItem>
                         </List>
+                        {canAddReview && <AddReview  handleAddReview={handleAddReview}/>}
+                        <ReviewsList reviewItems={DUMMY_REVIEWS} />
                     </Grid>
-                    <Grid item xs={8}>
-                        {daysDisplayed}
+                    <Grid item xs={7}>
+                        <Card sx={{ width: "100%", padding: "1vw", margin: "1vw", }}>
+                            <div style={{ float: "right", display: "flex", justifyContent: "space-around", width: "25%" }}>
+                                {currentDay > 1 ? <Button variant="outlined" onClick={() => setCurrentDayHandler("decrement")}><ArrowBackIosIcon/></Button> : <Button disabled><ArrowBackIosIcon /></Button>}
+                                {(currentDay < groupedByDay.length) ? <Button variant="outlined" onClick={() => setCurrentDayHandler("increment")}><ArrowForwardIosIcon /></Button> : <Button disabled><ArrowForwardIosIcon /></Button>}
+                            </div>
+                        </Card>
+                        {dayDisplayed}
                     </Grid>
                 </Grid>
-
             </Container>
         </Fragment>
     );
