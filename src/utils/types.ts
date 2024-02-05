@@ -22,3 +22,4 @@ export type PlanItems = FullPlan["items"]
 export type PlanItem = PlanItems[number]
 
 export type ItineraryItemType = RouterOutputs['plan']['findAll'][number]
+export type Reviews = RouterOutputs['review']['getPlanReviews']['reviews']

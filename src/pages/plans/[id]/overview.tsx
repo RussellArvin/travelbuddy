@@ -9,26 +9,59 @@ import { uuid } from "uuidv4";
 import { PlanItem } from '../../../utils/types';
 import ReviewsList from '../../../components/Reviews/ReviewsList';
 import AddReview from '../../../components/Reviews/AddReview';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const Overview: NextPage = () => {
     const router = useRouter()
+    const reviewContext = api.useUtils().review
+    // toggle navbar state
+    const [toggleNavbar, setToggleNavBar] = useState(false)
+
+
+    // check if need to can Review
+    const [canAddReview, setCanAddReview] = useState(true);
     const { data: planData, isLoading: isPlanDataLoading } = api.plan.getFullPlan.useQuery({
         id: router.query.id as string
     }, {
         enabled: router.isReady
     })
 
+    const { data: reviewData, isLoading: isReviewsLoading } = api.review.getPlanReviews.useQuery({
+        planId: router.query.id as string
+    }, {
+        enabled: router.isReady
+    })
+
+    const {
+        mutate: saveReviewMutation,
+        isLoading: isSaveReviewLoading
+    } = api.review.create.useMutation()
 
 
-    // toggle navbar state
-    const [toggleNavbar, setToggleNavBar] = useState(false)
-    
-
-    // check if need to can Review
-    const [canAddReview, setCanAddReview] = useState(true);
+    useEffect(()=> {
+        if(reviewData){
+            setCanAddReview(!reviewData.hasReviewed)
+        }
+    })
 
     const handleNavigationOnClick = () => {
         setToggleNavBar(!toggleNavbar);
+    }
+
+    const handleAddReview = (content: string, rating: number)=> {
+        saveReviewMutation({
+            planId: router.query.id as string,
+            content,
+            rating
+        },
+        {
+        onSuccess: () => {
+            reviewContext.getPlanReviews.invalidate()
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+          },)
     }
 
     const tripDetailItemStyle = {
@@ -38,10 +71,10 @@ const Overview: NextPage = () => {
         backgroundColor: 'background.paper',
     };
 
-    if(isPlanDataLoading || !planData){
+    if(!planData){
         return (
             <>
-            <h1>Loading</h1>
+            <LoadingSpinner isLoading={true} ></LoadingSpinner>
             </>
         )
     }
@@ -98,24 +131,25 @@ const Overview: NextPage = () => {
         <Fragment>
             <MainHeader toggleNav={handleNavigationOnClick} />
             <Container sx={{ margin: "1vw 2vw 0 2vw", }}>
-                <Grid container>
-                    <Grid item xs={5} sx={{}}>
-                        <Box sx={{ height: "256px", width: "100%" }}>
-                            <img src={countryImages.get(planData.city)}></img>
-                        </Box>
-                        <List style={tripDetailItemStyle} aria-label="Trip details">
-                            <ListItem>Trip to {planData.city}</ListItem>
-                            <ListItem>{formatDate(new Date(planData.startDate))}- {formatDate(new Date(planData.endDate))}</ListItem>
-                            <ListItem>{planData.groupSize} Pax</ListItem>
-                            <ListItem>Budget: ${planData.startBudget}-{planData.endBudget}</ListItem>
-                        </List>
-                        {canAddReview && <AddReview />}
-                        <ReviewsList reviewItems={DUMMY_REVIEWS}/>
-                    </Grid>
-                    <Grid item xs={7}>
-                        {daysDisplayed}
-                    </Grid>
-                </Grid>
+            {(isPlanDataLoading || isReviewsLoading) ? <LoadingSpinner isLoading={isPlanDataLoading || isReviewsLoading} ></LoadingSpinner>
+            :                 <Grid container>
+            <Grid item xs={5} sx={{}}>
+                <Box sx={{ height: "256px", width: "100%" }}>
+                    <img src={countryImages.get(planData.city)}></img>
+                </Box>
+                <List style={tripDetailItemStyle} aria-label="Trip details">
+                    <ListItem>Trip to {planData.city}</ListItem>
+                    <ListItem>{formatDate(new Date(planData.startDate))}- {formatDate(new Date(planData.endDate))}</ListItem>
+                    <ListItem>{planData.groupSize} Pax</ListItem>
+                    <ListItem>Budget: ${planData.startBudget}-{planData.endBudget}</ListItem>
+                </List>
+                {canAddReview && <AddReview handleAddReview={handleAddReview} />}
+                <ReviewsList reviewItems={reviewData.reviews}/>
+            </Grid>
+            <Grid item xs={7}>
+                {daysDisplayed}
+            </Grid>
+        </Grid>}
 
             </Container>
         </Fragment>
