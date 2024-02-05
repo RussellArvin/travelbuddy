@@ -13,6 +13,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import cityImages from '../../../utils/cityImages';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import downloadBase64AsFile from '../../../utils/downloadBase64AsFile';
 
 const Overview: NextPage = () => {
     const router = useRouter()
@@ -36,6 +37,11 @@ const Overview: NextPage = () => {
         mutate: saveReviewMutation,
         isLoading: isSaveReviewLoading
     } = api.review.create.useMutation()
+
+    const {
+        mutate: downloadProjectMutation,
+        isLoading: isProjectDownloading
+    } = api.plan.download.useMutation()
 
 
     useEffect(() => {
@@ -118,6 +124,20 @@ const Overview: NextPage = () => {
         return `${month}/${day}/${year}`;
     }
 
+    const handleDownloadProject = () => {
+        downloadProjectMutation({
+            id: planData.id
+        },
+            {
+                onSuccess: (base64String) => {
+                    downloadBase64AsFile(base64String, `${planData.city}.pdf`);
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            },)
+    }
+
     const DUMMY_REVIEWS = [
         { id: "m1", username: "Donald", content: "this place damn solid bro", rating: 5 },
         { id: "m2", username: "Bob", content: "this sucks bro", rating: 4 },
@@ -165,7 +185,9 @@ const Overview: NextPage = () => {
                         <div style={{ width: "100%", padding: "1vw", margin: "1vw", borderBottom: "2px solid #EBF2FA", display: "flex", justifyContent: "space-between" }}>
                             <div style={{ display: "flex", flexDirection: "column", width: "25%", height: "80px", }}>
                                 <Typography variant='h6' style={{ marginBottom: '10px' }}>Itinerary PDF</Typography>
-                                <Button variant="outlined">Download</Button>
+                                <Button variant="outlined"
+                                onClick={handleDownloadProject}
+                                >Download</Button>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-around", width: "25%", height: "" }}>
                                 {currentDay > 1 ? <Button variant="outlined" onClick={() => setCurrentDayHandler("decrement")}><ArrowBackIosIcon /></Button> : <Button disabled><ArrowBackIosIcon /></Button>}
