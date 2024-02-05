@@ -49,3 +49,11 @@ export const conversation = pgTable("conversation",{
     role: text("role").notNull(),
     content: text("content").notNull()
 })
+
+export const review = pgTable("review",{
+    id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+    planId: uuid("plan_id").notNull().references(() => plan.id),
+    userId: text("user_id").notNull().references(() => user.id),
+    content: text("content").notNull(),
+    rating: integer("rating").notNull()
+})
