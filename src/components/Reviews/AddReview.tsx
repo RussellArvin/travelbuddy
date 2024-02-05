@@ -2,18 +2,20 @@ import { Button, Card, Container, TextField } from "@mui/material"
 import { borderBottom } from "@mui/system"
 import { useState } from "react";
 
+interface AddReviewProps {
+    handleAddReview: (content:string, rating: number) => void;
+}
 
 
-const AddReview = () => {
+
+const AddReview = (props: AddReviewProps) => {
+    const { handleAddReview } = props
+
     const [reviewDetails, setReviewDetails] = useState("");
     const mainContainerStyle = {
         border: "1px solid black",
         margin: "2px 0 5px 0",
         padding: "10px",
-    }
-
-    const onSubmitReview = () => {
-        // dummy function
     }
 
     return <Card sx={mainContainerStyle}>
@@ -24,7 +26,7 @@ const AddReview = () => {
             maxRows={4}
             onChange={(e) => setReviewDetails(e.target.value)}
         ></TextField>
-        <Button variant="contained" sx={{float: "right"}} onClick={onSubmitReview}>Submit</Button>
+        <Button variant="contained" sx={{float: "right"}} onClick={()=> handleAddReview(reviewDetails,5)}>Submit</Button>
         {reviewDetails}
     </Card>
 }
