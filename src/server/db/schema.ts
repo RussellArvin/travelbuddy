@@ -35,8 +35,8 @@ export const planItems = pgTable("plan_items",{
     activity: text("activity").notNull(),
     planId: uuid("plan_id").notNull().references(() => plan.id),
     day: integer("day").notNull(),
-    startDate:date("start_date").notNull(),
-    endDate:date("end_date").notNull(),
+    startDate:timestamp("start_date").notNull(),
+    endDate:timestamp("end_date").notNull(),
     location: text("location").notNull(),
     isHalal: boolean("is_halal").notNull().default(false),
     imgUrl: text("img_url").notNull().default("https://travelbuddy-public-images.s3.ap-southeast-1.amazonaws.com/placeholder.jpg")

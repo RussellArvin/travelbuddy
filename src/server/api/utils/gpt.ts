@@ -56,10 +56,8 @@ const createCompletion = async (messages: ChatMessage[], planId: string, city: s
     const reply = completion.choices[0]?.message.content!
 
 
-    await Promise.all([
-        insertChatToDB("user",messages[messages.length-1]?.content as string,planId),
-        insertChatToDB("assistant",reply,planId),
-    ])
+        await insertChatToDB("user",messages[messages.length-1]?.content as string,planId)
+        await insertChatToDB("assistant",reply,planId)
 
 
     const jsonRegex = /```json\n([\s\S]*?)\n```/;
@@ -96,9 +94,9 @@ const saveItems = async (rawData: string, planId: string, city: string) => {
             activity,
             day,
             location,
-            isHalal,
-            startDate: startDateTime,
-            endDate: endDateTime,
+            isHalal: !!isHalal, //Used double negation as the value can be null sometimes
+            startDate: new Date(startDateTime),
+            endDate: new Date(endDateTime),
             imgUrl: await getImgOfPlace(`${location} ${city}`)
         }
     })
