@@ -7,9 +7,55 @@ import { conversation, plan, planItems } from "../../db/schema";
 import { uuid } from "uuidv4";
 import { resumeChat, startChat } from "../utils/gpt";
 import OpenAI from "openai";
-import { Plan } from "../types";
+import { FullPlan, Plan } from "../types";
+import { convertToPDF } from "../utils/pdf";
 
 export const planRouter = createTRPCRouter({
+    download: protectedProcedure
+    .input(z.object({
+        id:z.string()
+    }))
+    .mutation(async ({ctx,input})=>{
+        const rawPlan = await db.select({
+            id: plan.id,
+            userId: plan.userId,
+            city: plan.city,
+            startDate: plan.startDate,
+            endDate: plan.endDate,
+            startBudget: plan.startBudget,
+            endBudget: plan.endBudget,
+            groupSize: plan.groupSize
+        })
+        .from(plan)
+        .where(eq(plan.id,input.id))
+        .limit(1)
+
+        if(!rawPlan[0] || rawPlan.length == 0) throw new TRPCError({code:"NOT_FOUND"})
+
+
+        const rawPlanItems = await db.select({
+            location: planItems.location,
+            startDate: planItems.startDate,
+            endDate: planItems.endDate,
+            activity: planItems.activity,
+            imgUrl: planItems.imgUrl,
+            day:planItems.day,
+        })
+        .from(planItems)
+        .where(eq(planItems.planId,rawPlan[0].id))
+
+        if(!rawPlanItems || rawPlanItems.length == 0) throw new TRPCError({code:"NOT_FOUND"})
+
+        const planData: FullPlan = {
+            ...rawPlan[0],
+            items: rawPlanItems
+        }
+
+
+        const base64String = await convertToPDF(planData)
+
+        return base64String;
+    }),
     findAll: protectedProcedure
     .query(async({ctx})=>{
         const planData = await db
