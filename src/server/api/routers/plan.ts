@@ -7,6 +7,7 @@ import { conversation, plan, planItems } from "../../db/schema";
 import { uuid } from "uuidv4";
 import { resumeChat, startChat } from "../utils/gpt";
 import OpenAI from "openai";
+import { Plan } from "../types";
 
 export const planRouter = createTRPCRouter({
     findAll: protectedProcedure
