@@ -148,6 +148,67 @@ export const planRouter = createTRPCRouter({
             : await startChat(planData)
 
         return reply;
+    }),
+    getChatHistory: protectedProcedure
+    .input(z.object({
+        id:z.string()
+    }))
+    .query(async ({ctx,input})=>{
+        const rawPlanData = await db
+            .select({
+                id: plan.id,
+                userId: plan.userId,
+                startBudget: plan.startBudget,
+                endBudget: plan.endBudget,
+                startDate: plan.startDate,
+                endDate: plan.endDate,
+                groupSize: plan.groupSize,
+                city: plan.city,
+            })
+            .from(plan)
+            .where(eq(plan.id,input.id))
+
+        if(!rawPlanData[0]) throw new TRPCError({
+            code:"NOT_FOUND"
+        })
+
+        const planData: Plan = rawPlanData[0]
+
+        if(planData.userId != ctx.auth.userId) throw new TRPCError({
+            code:"UNAUTHORIZED"
+        })
+
+        const chatHistory = await getChatHistory(input.id)
+
+        if(!chatHistory || chatHistory.length == 0){
+            await startChat(planData)
+            return (await getChatHistory(input.id))
+        }
+        else return chatHistory
+
     })
 
 })
+
+const getChatHistory = async (planId: string)=> {
+    const chatHistory = await db.select({
+        role:conversation.role,
+        content:conversation.content
+    })
+    .from(conversation)
+    .where(eq(conversation.planId,planId))
+    .orderBy(asc(conversation.createdAt))
+
+    return chatHistory;
+}
+
+interface ChatHistory {
+    content: string;
+    role:string;
+}
+
+const handleChatEnding = (chatHistory: ChatHistory[]) => {
+    const key = "THE JSON IS"
+
+    return chatHistory[0]?.content.includes(key)
+}

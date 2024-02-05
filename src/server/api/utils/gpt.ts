@@ -10,10 +10,13 @@ type ChatRole = ChatMessage["role"]
 
 
 export const startChat = async (plan: Plan): Promise<string> => {
+
+    const prompt = `${process.env.INITIAL_PROMPT1} We want to go to ${plan.city}, with a budget from $${plan.startBudget} - $${plan.endBudget} and we have ${plan.groupSize} people going.  The trip starts on ${plan.startDate} and ends on ${plan.endDate}. ${process.env.INITIAL_PROMPT2}`
+
    const messages : ChatMessage[] = [
     {
         role:"system",
-        content: process.env.INITIAL_PROMPT!
+        content: prompt
        }
    ]
 

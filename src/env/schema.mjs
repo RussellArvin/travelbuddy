@@ -9,7 +9,8 @@ export const serverSchema = z.object({
   DATABASE_URL: z.string().url().optional(),
   CLERK_SECRET_KEY: z.string(),
   NODE_ENV: z.enum(["development", "test", "production"]),
-  INITIAL_PROMPT: z.string(),
+  INITIAL_PROMPT1: z.string(),
+  INITIAL_PROMPT2: z.string(),
   OPENAI_API_KEY: z.string(),
 });
 
@@ -23,7 +24,8 @@ export const serverEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
   NODE_ENV: process.env.NODE_ENV,
-  INITIAL_PROMPT: process.env.INITIAL_PROMPT
+  INITIAL_PROMPT1: process.env.INITIAL_PROMPT1,
+  INITIAL_PROMPT2: process.env.INITIAL_PROMPT2
 };
 
 /**

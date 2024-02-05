@@ -7,6 +7,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { Box, Typography, TextField, MenuItem, Menu, Autocomplete, Button } from "@mui/material";
 import toast from "react-hot-toast"
 import { api } from "../utils/api";
+import { useRouter } from "next/router";
 
 const Chat: NextPage = () => {
     const [city, setCity] = useState('');
@@ -15,6 +16,8 @@ const Chat: NextPage = () => {
     const [endDate, setEndDate] = useState(new Date());
     const [startBudget, setStartBudget] = useState(0);
     const [endBudget, setEndBudget] = useState(0);
+
+    const router = useRouter();
 
     const {
         mutate: createPlanMutation,
@@ -33,8 +36,8 @@ const Chat: NextPage = () => {
               groupSize: paxNo
             },
             {
-              onSuccess: (checkoutUrl) => {
-                toast.success("CREATED!")
+              onSuccess: (planId) => {
+                router.push(`/plans/${planId}/chatbox`)
               },
               onError: (error) => {
                 console.log(error);
