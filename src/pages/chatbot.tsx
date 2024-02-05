@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ChatWindow from '../components/Chatbox/chatWindow';
+import ChatWindow from '../components/Chatbox/ChatWindow';
 import { Container, TextField, Button, Box } from '@mui/material';
 import { NextPage } from 'next';
 

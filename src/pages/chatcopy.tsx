@@ -4,19 +4,27 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import { Box, Typography, TextField, MenuItem, Menu, Autocomplete, Button, Paper, Grid } from "@mui/material";
-import toast from "react-hot-toast";
-import { MainHeader } from "../components/Layout/MainHeader/MainHeader";
+import { Box, Typography, TextField, MenuItem, Menu, Autocomplete, Button, Paper } from "@mui/material";
+import Grid from '@mui/material/Grid';
+import { makeStyles } from "@material-ui/styles";
+import toast from "react-hot-toast"
 import { api } from "../utils/api";
-import { useRouter } from "next/router";
+import { MainHeader } from "../components/Layout/MainHeader/MainHeader";
 
-const Chat: NextPage = () => {
+
+const Chatcopy: NextPage = () => {
     const [city, setCity] = useState('');
     const [paxNo, setPaxNo] = useState(1);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [startBudget, setStartBudget] = useState("0");
-    const [endBudget, setEndBudget] = useState("0");
+    const [startBudget, setStartBudget] = useState("");
+    const [endBudget, setEndBudget] = useState("");
+
+    const {
+        mutate: createPlanMutation,
+        isLoading: isCreatePlanLoading
+    } = api.plan.create.useMutation()
+
 
     // toggle navbar state
     const [toggleNavbar, setToggleNavBar] = useState(false)
@@ -25,16 +33,7 @@ const Chat: NextPage = () => {
         setToggleNavBar(!toggleNavbar);
     }
     
-
-    const router = useRouter();
-
-    const {
-        mutate: createPlanMutation,
-        isLoading: isCreatePlanLoading
-    } = api.plan.create.useMutation()
-
     const onSubmit = () => {
-
         createPlanMutation(
             {
                 startBudget: Number(startBudget),
@@ -45,12 +44,12 @@ const Chat: NextPage = () => {
                 groupSize: paxNo
             },
             {
-              onSuccess: (planId) => {
-                router.push(`/plans/${planId}/chatbox`)
-              },
-              onError: (error) => {
-                console.log(error);
-              },
+                onSuccess: (checkoutUrl) => {
+                    toast.success("CREATED!")
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
             },
         );
     }
@@ -60,8 +59,7 @@ const Chat: NextPage = () => {
         { label: 'New York' },
         { label: 'Hall 10' },
     ];
-    // Validation: Ensure end date is after start date
-    const isEndDateValid = endDate > startDate;
+   
     return (
         <Fragment>
             <MainHeader toggleNav={handleNavigationOnClick} />
@@ -211,4 +209,4 @@ const Chat: NextPage = () => {
     )
 };
 
-export default Chat;
+export default Chatcopy;

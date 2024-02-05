@@ -19,6 +19,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages }) => {
         overflowY: 'scroll',
         display: 'flex',
         flexDirection: 'column',
+        border: '1px solid #ccc', // Optional: Add a border for better visibility
+        borderRadius: '8px', // Optional: Add border-radius for better aesthetics
       }}
     >
       {messages.map((message, index) => (
