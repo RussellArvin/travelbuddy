@@ -1,11 +1,20 @@
 import OpenAI from "openai"
 import { db } from "../../db";
-import { conversation } from "../../db/schema";
+import { conversation, planItems } from "../../db/schema";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! })
 
 type ChatMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 type ChatRole = ChatMessage["role"]
+
+type Activity = {
+    day: number;
+    activity: string;
+    location: string;
+    startDateTime: string;
+    endDateTime: string;
+    isHalal: boolean;
+}
 
 
 
@@ -44,11 +53,20 @@ const createCompletion = async (messages: ChatMessage[], planId: string) => {
     })
 
     const reply = completion.choices[0]?.message.content!
+    console.log(reply)
 
     await Promise.all([
         insertChatToDB("user",messages[messages.length-1]?.content as string,planId),
         insertChatToDB("assistant",reply,planId),
     ])
+
+    console.log("Items saved!")
+
+    const jsonRegex = /```json\n([\s\S]*?)\n```/;
+
+    const match = reply.match(jsonRegex)
+
+    if(match) saveItems(reply,planId)
 
     return reply
 }
@@ -60,4 +78,31 @@ const insertChatToDB = async (role: ChatRole, content: string, planId: string) =
         role,
         content
     })
+}
+
+
+const saveItems = async (rawData: string, planId: string) => {
+    console.log("HERE IS WHEN THE THING IS BEING SAVED")
+    const jsonRegex = /```json\n([\s\S]*?)\n```/;
+
+    const match = rawData.match(jsonRegex)
+
+    if(!match || !match[1]) throw Error
+
+    const activities: Activity[] = JSON.parse(match[1]);
+
+    const insertValues = activities.map(({activity,day,startDateTime,endDateTime,location,isHalal})=>{
+        return {
+            planId,
+            activity,
+            day,
+            location,
+            isHalal,
+            startDate: startDateTime,
+            endDate: endDateTime
+        }
+    })
+
+    await db.insert(planItems).values(insertValues)
+    return;
 }

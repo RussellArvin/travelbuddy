@@ -10,6 +10,7 @@ type Message = RouterOutputs["plan"]["getChatHistory"]
   const Chatbot: NextPage = () => {
     const router = useRouter()
     const [messages, setMessages] = useState<Message>([]);
+    const planContext = api.useUtils().plan;
   
     const [inputValue, setInputValue] = useState('');
 
@@ -48,6 +49,7 @@ type Message = RouterOutputs["plan"]["getChatHistory"]
             },
             {
               onSuccess: () => {
+                planContext.getChatHistory.invalidate()
                 setMessages(chatMessages)
               },
               onError: (error) => {

@@ -3,10 +3,11 @@ import { db } from "../../db"
 import { TRPCError } from "@trpc/server";
 import { asc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
-import { conversation, plan } from "../../db/schema";
+import { conversation, plan, planItems } from "../../db/schema";
 import { uuid } from "uuidv4";
 import { resumeChat, startChat } from "../utils/gpt";
 import OpenAI from "openai";
+import { PgBooleanBuilder } from "drizzle-orm/pg-core";
 
 export const planRouter = createTRPCRouter({
     findAll: protectedProcedure
@@ -50,9 +51,43 @@ export const planRouter = createTRPCRouter({
 
         if(!planData[0]) throw new TRPCError({
             code:"NOT_FOUND"
-        })    
+        })
 
         return planData[0]
+    }),
+    getPlanItems: protectedProcedure
+    .input(z.object({
+        id: z.string()
+    }))
+    .query(async({ctx,input})=>{
+        const rawPlanData = await db
+            .select({
+                id:plan.id
+            })
+            .from(plan)
+            .where(eq(plan.id,input.id))
+
+        const planData = rawPlanData[0]
+
+        if(!planData) throw new TRPCError({code:"NOT_FOUND"})
+
+        const rawPlanItems = await db
+            .select({
+                id: planItems.id,
+                activity: planItems.activity,
+                startDate: planItems.startDate,
+                endDate: planItems.endDate,
+                location: planItems.location,
+                isHalal: planItems.isHalal
+            })
+            .from(planItems)
+            .where(eq(planItems.planId,input.id))
+        
+        const itemData = rawPlanItems[0]
+
+        if(!itemData) throw new TRPCError({code:'NOT_FOUND'})
+
+        return itemData
     }),
     create: protectedProcedure
     .input(
@@ -78,7 +113,7 @@ export const planRouter = createTRPCRouter({
 
         const planId = uuid();
 
-        const rawData = await db.insert(plan)
+        await db.insert(plan)
         .values({
             // @ts-ignore
             id: planId,
@@ -91,19 +126,7 @@ export const planRouter = createTRPCRouter({
             groupSize
         })
 
-        // const query = sql`INSERT INTO plans (${plan.id}, ${plan.userId}, ${plan.startBudget}, ${plan.endBudget}, ${plan.city}, ${plan.startDate}, ${plan.endDate}, ${plan.groupSize})
-        // VALUES (${planId}, ${ctx.auth.userId},${startBudget}, ${endBudget} ${city}, ${startDate}, ${endDate}, ${groupSize})`
-
-
-        try{
-            //await db.execute(query);
-
         return planId
-        }
-        catch(e){
-            console.log(e)
-            throw e
-        }
     }),
     chat:protectedProcedure
     .input(z.object({
@@ -184,7 +207,7 @@ export const planRouter = createTRPCRouter({
             await startChat(planData)
             return (await getChatHistory(input.id))
         }
-        else return chatHistory
+        else return (chatHistory)
 
     })
 
@@ -207,8 +230,11 @@ interface ChatHistory {
     role:string;
 }
 
-const handleChatEnding = (chatHistory: ChatHistory[]) => {
-    const key = "THE JSON IS"
+const handleChat = (chatHistory: ChatHistory[]) => {
+    //chatHistory = chatHistory.splice(1);
 
-    return chatHistory[0]?.content.includes(key)
+    if(chatHistory[chatHistory.length-1]?.content.includes('THE JSON IS')){
+        chatHistory.pop()
+        return chatHistory
+    }
 }

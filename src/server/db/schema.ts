@@ -5,7 +5,8 @@ import {
     timestamp, 
     uuid,
     integer,
-    date
+    date,
+    boolean
 } from "drizzle-orm/pg-core";
 
 
@@ -30,11 +31,14 @@ export const plan = pgTable("plans",{
 })
 
 export const planItems = pgTable("plan_items",{
-    id: uuid("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().notNull().default(sql`gen_random_uuid()`),
+    activity: text("activity").notNull(),
     planId: uuid("plan_id").notNull().references(() => plan.id),
+    day: integer("day").notNull(),
     startDate:date("start_date").notNull(),
     endDate:date("end_date").notNull(),
-    location: text("location").notNull()
+    location: text("location").notNull(),
+    isHalal: boolean("is_halal").notNull().default(false)
 })
 
 export const conversation = pgTable("conversation",{
