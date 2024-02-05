@@ -1,13 +1,5 @@
 import { RouterOutputs } from "./api";
 
-export interface ItineraryItemType {
-    location: string;
-    startBudget: number,
-    endBudget: number,
-    duration: number,
-    pax: number,
-    rating: boolean,
-}
 
 export interface DayItemType {  
     activity: string;
@@ -21,3 +13,5 @@ export interface DayItemType {
 type FullPlan = RouterOutputs["plan"]["getFullPlan"]
 export type PlanItems = FullPlan["items"]
 export type PlanItem = PlanItems[number]
+
+export type ItineraryItemType = RouterOutputs['plan']['findAll'][number]
