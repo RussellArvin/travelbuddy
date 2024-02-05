@@ -28,7 +28,7 @@ export const MainHeader = () => {
         <Toolbar sx={{ backgroundColor: "#05668D" }}>
           <Container sx={{ justifyContent: "flex-start", display: "flex", alignItems: "center", }}>
             <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => { router.push("/") }}>
-              <img src={"https:-public-images.s3.ap-southeast-1.amazonaws.com/transparent.png"} alt="Logo" style={{ height: '70px', marginRight: '10px', padding: "4px" }} />
+              <img src={"https://travelbuddy-public-images.s3.ap-southeast-1.amazonaws.com/topphoto.png"} alt="Logo" style={{ height: '70px', marginRight: '10px', padding: "4px" }} />
               <Typography variant="h5" component="div">TravelBuddy.AI</Typography>
             </div>
             {currentPath.includes("plans") &&

@@ -153,8 +153,12 @@ const Overview: NextPage = () => {
             <Container sx={{ margin: "1vw 2vw 0 2vw", }}>
                 <Grid container>
                     <Grid item xs={5} sx={{}}>
-                        <Box sx={{ height: "256px", width: "100%" }}>
-                            <img src={cityImages.get(planData.city)}></img>
+                        <Box sx={{ height: "256px", width: "100%", overflow: "hidden" }}>
+                            <img
+                                src={cityImages.get(planData.city)}
+                                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                                alt="City"
+                            />
                         </Box>
                         <List style={tripDetailItemStyle} aria-label="Trip details">
                             <ListItem sx={{ padding: "0.3vw" }}>
@@ -179,14 +183,14 @@ const Overview: NextPage = () => {
                             </ListItem>
                         </List>
                         {canAddReview && <AddReview handleAddReview={handleAddReview} />}
-                        <ReviewsList reviewItems={DUMMY_REVIEWS} />
+                        <ReviewsList reviewItems={reviewData?.reviews} />
                     </Grid>
                     <Grid item xs={7}>
                         <div style={{ width: "100%", padding: "1vw", margin: "1vw", borderBottom: "2px solid #EBF2FA", display: "flex", justifyContent: "space-between" }}>
                             <div style={{ display: "flex", flexDirection: "column", width: "25%", height: "80px", }}>
                                 <Typography variant='h6' style={{ marginBottom: '10px' }}>Itinerary PDF</Typography>
                                 <Button variant="outlined"
-                                onClick={handleDownloadProject}
+                                    onClick={handleDownloadProject}
                                 >Download</Button>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-around", width: "25%", height: "" }}>
