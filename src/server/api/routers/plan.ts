@@ -167,7 +167,7 @@ export const planRouter = createTRPCRouter({
         .orderBy(asc(conversation.createdAt))
 
         const reply = chatHistory.length > 0 ? 
-            await resumeChat(chatHistory as OpenAI.Chat.Completions.ChatCompletionMessageParam[],input.message,input.id)
+            await resumeChat(chatHistory as OpenAI.Chat.Completions.ChatCompletionMessageParam[],input.message,input.id,planData.city)
             : await startChat(planData)
 
         return reply;

@@ -1,0 +1,1 @@
+ALTER TABLE "plan_items" ADD COLUMN "img_url" text DEFAULT 'https://travelbuddy-public-images.s3.ap-southeast-1.amazonaws.com/travelbuddy.jpg' NOT NULL;

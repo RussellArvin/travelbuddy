@@ -1,0 +1,1 @@
+ALTER TABLE "plan_items" ALTER COLUMN "img_url" SET DEFAULT 'https://travelbuddy-public-images.s3.ap-southeast-1.amazonaws.com/placeholder.jpg';
