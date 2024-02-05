@@ -10,6 +10,13 @@ export interface DayItemType {
     startDateTime: string;
 }
 
+export interface Review {
+    id: string,
+    username: string,
+    content: string,
+    rating: number,
+}
+
 type FullPlan = RouterOutputs["plan"]["getFullPlan"]
 export type PlanItems = FullPlan["items"]
 export type PlanItem = PlanItems[number]

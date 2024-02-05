@@ -1,0 +1,32 @@
+import { Button, Card, Container, TextField } from "@mui/material"
+import { borderBottom } from "@mui/system"
+import { useState } from "react";
+
+
+
+const AddReview = () => {
+    const [reviewDetails, setReviewDetails] = useState("");
+    const mainContainerStyle = {
+        border: "1px solid black",
+        margin: "2px 0 5px 0",
+        padding: "10px",
+    }
+
+    const onSubmitReview = () => {
+        // dummy function
+    }
+
+    return <Card sx={mainContainerStyle}>
+        <h1>Write your review!</h1>
+        <TextField 
+            sx={{ width: "100%", marginBottom: "20px"}}
+            multiline
+            maxRows={4}
+            onChange={(e) => setReviewDetails(e.target.value)}
+        ></TextField>
+        <Button variant="contained" sx={{float: "right"}} onClick={onSubmitReview}>Submit</Button>
+        {reviewDetails}
+    </Card>
+}
+
+export default AddReview

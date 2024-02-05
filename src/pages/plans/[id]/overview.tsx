@@ -7,8 +7,8 @@ import { MainHeader } from '../../../components/Layout/MainHeader/MainHeader';
 import Day from '../../../components/Days/Day';
 import { uuid } from "uuidv4";
 import { PlanItem } from '../../../utils/types';
-
-
+import ReviewsList from '../../../components/Reviews/ReviewsList';
+import AddReview from '../../../components/Reviews/AddReview';
 
 const Overview: NextPage = () => {
     const router = useRouter()
@@ -22,6 +22,10 @@ const Overview: NextPage = () => {
 
     // toggle navbar state
     const [toggleNavbar, setToggleNavBar] = useState(false)
+    
+
+    // check if need to can Review
+    const [canAddReview, setCanAddReview] = useState(true);
 
     const handleNavigationOnClick = () => {
         setToggleNavBar(!toggleNavbar);
@@ -79,14 +83,23 @@ const Overview: NextPage = () => {
         // Combine the parts into the final format
         return `${month}/${day}/${year}`;
     }
-      
+    
+    const DUMMY_REVIEWS = [
+        {id: "m1", username: "Donald", content: "this place damn solid bro", rating: 5},
+        {id: "m2", username: "Bob", content: "this sucks bro", rating: 4},
+        {id: "m3", username: "Sarah", content: "very solid bro", rating: 3},
+        {id: "m4", username: "Gary", content: "very dope and solid sis", rating: 3},
+        {id: "m5", username: "Poppy", content: "I love food here", rating: 5},
+        {id: "m6", username: "Tiny", content: "take me to church pls", rating: 2},
+    ]
+
 
     return (
         <Fragment>
             <MainHeader toggleNav={handleNavigationOnClick} />
             <Container sx={{ margin: "1vw 2vw 0 2vw", }}>
                 <Grid container>
-                    <Grid item xs={4} sx={{ border: "2px solid black" }}>
+                    <Grid item xs={5} sx={{}}>
                         <Box sx={{ height: "256px", width: "100%" }}>
                             <img src={countryImages.get(planData.city)}></img>
                         </Box>
@@ -96,8 +109,10 @@ const Overview: NextPage = () => {
                             <ListItem>{planData.groupSize} Pax</ListItem>
                             <ListItem>Budget: ${planData.startBudget}-{planData.endBudget}</ListItem>
                         </List>
+                        {canAddReview && <AddReview />}
+                        <ReviewsList reviewItems={DUMMY_REVIEWS}/>
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={7}>
                         {daysDisplayed}
                     </Grid>
                 </Grid>
