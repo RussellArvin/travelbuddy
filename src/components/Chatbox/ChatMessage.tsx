@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Typography, CardContent } from '@mui/material';
 import { Height } from '@mui/icons-material';
+import { fontWeight } from '@mui/system';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -16,14 +17,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   const userStyle = {
     margin: '10px',
-    backgroundColor: '#427aa1',
+    backgroundColor: '#e0f7fa',
     alignSelf: 'flex-end',
     overflow: 'visible',
   };
 
   const assistantStyle = {
     margin: '10px',
-    backgroundColor: '#679436',
+    backgroundColor: '#ffe0b2',
     alignSelf: 'flex-start',
     overflow: 'visible',
   };

@@ -149,6 +149,7 @@ const Overview: NextPage = () => {
 
     return (
         <Fragment>
+            <LoadingSpinner isLoading={isProjectDownloading} />
             <MainHeader />
             <Container sx={{ margin: "1vw 2vw 0 2vw", }}>
                 <Grid container>
