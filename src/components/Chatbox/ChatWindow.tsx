@@ -1,14 +1,12 @@
 import React from 'react';
-import ChatMessage from './chatMessage';
+import ChatMessage from './ChatMessage';
 import { Box } from '@mui/material';
+import { RouterOutputs } from '../../utils/api';
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
+type Message = RouterOutputs["plan"]["getChatHistory"]
 
 interface ChatWindowProps {
-  messages: Message[];
+  messages: Message;
 }
 
 const ChatWindow: React.FC<ChatWindowProps> = ({ messages }) => {
