@@ -309,6 +309,7 @@ const getChatHistory = async (planId: string)=> {
     .from(conversation)
     .where(eq(conversation.planId,planId))
     .orderBy(asc(conversation.createdAt))
+    .offset(1)
 
     return chatHistory;
 }

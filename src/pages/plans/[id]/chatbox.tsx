@@ -31,7 +31,8 @@ const Chatbot: NextPage = () => {
 
   useEffect(() => {
     if (chatMessages) {
-      setMessages(chatMessages)
+      if(chatMessages[chatMessages.length-1]?.content.includes(`THE JSON IS`)) router.push(`/plans/${router.query.id as string}/overview`)
+      else setMessages(chatMessages)
     }
   })
 
