@@ -60,8 +60,7 @@ const Chat: NextPage = () => {
         { label: 'New York' },
         { label: 'Hall 10' },
     ];
-    // Validation: Ensure end date is after start date
-    const isEndDateValid = endDate > startDate;
+   
     return (
         <Fragment>
             <MainHeader toggleNav={handleNavigationOnClick} />
