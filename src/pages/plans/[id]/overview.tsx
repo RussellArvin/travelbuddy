@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Container, TextField, Button, Box, Grid, List, ListItem, Card } from '@mui/material';
+import { Container, TextField, Button, Box, Grid, List, ListItem, Card, Typography } from '@mui/material';
 import { NextPage } from 'next';
 import { api, RouterOutputs } from '../../../utils/api'
 import { useRouter } from 'next/router';
@@ -9,21 +9,14 @@ import { uuid } from "uuidv4";
 import { PlanItem } from '../../../utils/types';
 import ReviewsList from '../../../components/Reviews/ReviewsList';
 import AddReview from '../../../components/Reviews/AddReview';
-<<<<<<< HEAD
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import cityImages from '../../../utils/cityImages';
-=======
 import cityImages from '../../../utils/cityImages';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
->>>>>>> d4d2e9c (feat: added generate new Itinerary on mainpage)
 
 const Overview: NextPage = () => {
     const router = useRouter()
     const reviewContext = api.useUtils().review
-    // toggle navbar state
-    const [toggleNavbar, setToggleNavBar] = useState(false)
-
 
     // check if need to can Review
     const [canAddReview, setCanAddReview] = useState(true);
@@ -45,32 +38,29 @@ const Overview: NextPage = () => {
     } = api.review.create.useMutation()
 
 
-    useEffect(()=> {
-        if(reviewData){
+    useEffect(() => {
+        if (reviewData) {
             setCanAddReview(!reviewData.hasReviewed)
         }
     })
 
     const [currentDay, setCurrentDay] = useState(1);
 
-    const handleNavigationOnClick = () => {
-        setToggleNavBar(!toggleNavbar);
-    }
 
-    const handleAddReview = (content: string, rating: number)=> {
+    const handleAddReview = (content: string, rating: number) => {
         saveReviewMutation({
             planId: router.query.id as string,
             content,
             rating
         },
-        {
-        onSuccess: () => {
-            reviewContext.getPlanReviews.invalidate()
-        },
-        onError: (error) => {
-            console.log(error);
-        },
-          },)
+            {
+                onSuccess: () => {
+                    reviewContext.getPlanReviews.invalidate()
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            },)
     }
 
     const tripDetailItemStyle = {
@@ -80,10 +70,10 @@ const Overview: NextPage = () => {
         backgroundColor: 'background.paper',
     };
 
-    if(!planData){
+    if (!planData) {
         return (
             <>
-            <LoadingSpinner isLoading={true} ></LoadingSpinner>
+                <LoadingSpinner isLoading={true} ></LoadingSpinner>
             </>
         )
     }
@@ -99,20 +89,16 @@ const Overview: NextPage = () => {
         },
         []
     );
-        
+
     const setCurrentDayHandler = (action: string) => {
         let dayNum = currentDay;
-    
+
         if (action === "increment" && dayNum < groupedByDay.length) {
             setCurrentDay((prev) => prev + 1);
         } else if (action === "decrement" && dayNum > 1) {
             setCurrentDay((prev) => prev - 1);
         }
     }
-
-    // const daysDisplayed = groupedByDay.map((item: PlanItem[]) => (
-    //     <Day key={uuid()} dayItems={item} />
-    // ));
 
     const dayDisplayed = <Day key={uuid()} dayItems={groupedByDay[currentDay - 1]} />
 
@@ -143,7 +129,7 @@ const Overview: NextPage = () => {
 
     return (
         <Fragment>
-            <MainHeader toggleNav={handleNavigationOnClick} />
+            <MainHeader />
             <Container sx={{ margin: "1vw 2vw 0 2vw", }}>
                 <Grid container>
                     <Grid item xs={5} sx={{}}>
@@ -151,21 +137,41 @@ const Overview: NextPage = () => {
                             <img src={cityImages.get(planData.city)}></img>
                         </Box>
                         <List style={tripDetailItemStyle} aria-label="Trip details">
-                            <ListItem>Trip to {planData.city}</ListItem>
-                            <ListItem>{formatDate(new Date(planData.startDate))}- {formatDate(new Date(planData.endDate))}</ListItem>
-                            <ListItem>{planData.groupSize} Pax</ListItem>
-                            <ListItem>Budget: ${planData.startBudget}-{planData.endBudget}</ListItem>
+                            <ListItem sx={{ padding: "0.3vw" }}>
+                                <Typography variant='h4'>
+                                    Trip to {planData.city}
+                                </Typography>
+                            </ListItem>
+                            <ListItem sx={{ padding: "0.3vw" }}>
+                                <Typography variant='h5'>
+                                    {formatDate(new Date(planData.startDate))}- {formatDate(new Date(planData.endDate))}
+                                </Typography>
+                            </ListItem>
+                            <ListItem sx={{ padding: "0.3vw" }}>
+                                <Typography variant='h5'>
+                                    {planData.groupSize} Pax
+                                </Typography>
+                            </ListItem>
+                            <ListItem sx={{ padding: "0.3vw" }}>
+                                <Typography variant='h5'>
+                                    Budget: ${planData.startBudget}-{planData.endBudget}
+                                </Typography>
+                            </ListItem>
                         </List>
-                        {canAddReview && <AddReview  handleAddReview={handleAddReview}/>}
+                        {canAddReview && <AddReview handleAddReview={handleAddReview} />}
                         <ReviewsList reviewItems={DUMMY_REVIEWS} />
                     </Grid>
                     <Grid item xs={7}>
-                        <Card sx={{ width: "100%", padding: "1vw", margin: "1vw", }}>
-                            <div style={{ float: "right", display: "flex", justifyContent: "space-around", width: "25%" }}>
-                                {currentDay > 1 ? <Button variant="outlined" onClick={() => setCurrentDayHandler("decrement")}><ArrowBackIosIcon/></Button> : <Button disabled><ArrowBackIosIcon /></Button>}
+                        <div style={{ width: "100%", padding: "1vw", margin: "1vw", borderBottom: "2px solid #EBF2FA", display: "flex", justifyContent: "space-between" }}>
+                            <div style={{ display: "flex", flexDirection: "column", width: "25%", height: "80px", }}>
+                                <Typography variant='h6' style={{ marginBottom: '10px' }}>Itinerary PDF</Typography>
+                                <Button variant="outlined">Download</Button>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-around", width: "25%", height: "" }}>
+                                {currentDay > 1 ? <Button variant="outlined" onClick={() => setCurrentDayHandler("decrement")}><ArrowBackIosIcon /></Button> : <Button disabled><ArrowBackIosIcon /></Button>}
                                 {(currentDay < groupedByDay.length) ? <Button variant="outlined" onClick={() => setCurrentDayHandler("increment")}><ArrowForwardIosIcon /></Button> : <Button disabled><ArrowForwardIosIcon /></Button>}
                             </div>
-                        </Card>
+                        </div>
                         {dayDisplayed}
                     </Grid>
                 </Grid>

@@ -6,14 +6,12 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Button, Container } from '@mui/material';
+import { useRouter } from 'next/router';
 
-interface MainHeaderProps {
-  toggleNav: () => void;
-}
 
-export const MainHeader: React.FC<MainHeaderProps> = ({ toggleNav }) => {
+export const MainHeader = () => {
   const [currentPath, setCurrentPath] = useState("");
-
+  const router = useRouter();
   // check for pathname
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -24,17 +22,15 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ toggleNav }) => {
   }, []); // Empty dependency array to run the effect only once
 
   return (
-    <Box sx={{ flexGrow: 1}}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar sx={{backgroundColor: "#05668D"}}>
-          <Container sx={{justifyContent: "flex-start", display:"flex", alignItems: "center", }}>
-            {/* <Typography variant="h5" component="div" onClick={() => {
-            
-          }} sx={{ flexGrow: 1, cursor: "pointer" }}>
-            TravelBuddy.AI
-          </Typography> */}
-
-            {currentPath == "/chat" &&
+        <Toolbar sx={{ backgroundColor: "#05668D" }}>
+          <Container sx={{ justifyContent: "flex-start", display: "flex", alignItems: "center", }}>
+            <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => { router.push("/") }}>
+              <img src={"https:-public-images.s3.ap-southeast-1.amazonaws.com/transparent.png"} alt="Logo" style={{ height: '70px', marginRight: '10px', padding: "4px" }} />
+              <Typography variant="h5" component="div">TravelBuddy.AI</Typography>
+            </div>
+            {currentPath.includes("plans") &&
               <Typography
                 variant="h6"
                 component="div"
@@ -42,18 +38,10 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ toggleNav }) => {
                   window.open("https://www.singtel.com/personal/products-services/mobile/roaming/all-plans", "_blank")
                 }}
                 sx={{
-                  margin: "0 2vw 0 vw", cursor: "pointer", '&:hover': {
+                  margin: "0 2vw 0 4vw", cursor: "pointer", '&:hover': {
                     color: 'blue', // Change to the desired hover color
                   },
                 }}>Find Mobile Plans</Typography>}
-            {currentPath == "/chat" &&
-              <Typography
-                variant="h6"
-                component="div" sx={{
-                  margin: "0 3vw 0 3vw", cursor: "pointer", '&:hover': {
-                    color: 'blue', // Change to the desired hover color
-                  },
-                }}>Find Stays</Typography>}
           </Container>
           <Button sx={{ color: "white", border: "1px solid white" }} variant="outlined" href="#outlined-buttons">
             Logout

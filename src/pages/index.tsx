@@ -11,16 +11,9 @@ const Home: NextPage = () => {
     isLoading: isPlansLoading
   } = api.plan.findAll.useQuery()
 
-  // toggle navbar state
-  const [toggleNavbar, setToggleNavBar] = useState(false)
-
-  const handleNavigationOnClick = () => {
-    setToggleNavBar(!toggleNavbar);
-  }
-  
-  return (
+  return (  
     <>
-      <MainHeader toggleNav={handleNavigationOnClick}/>
+      <MainHeader />
       {isPlansLoading ? (
         // Show loading spinner while the plans are loading
         <LoadingSpinner isLoading={isPlansLoading} />

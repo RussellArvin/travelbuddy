@@ -13,14 +13,6 @@ const Chatbot: NextPage = () => {
   const router = useRouter()
   const [messages, setMessages] = useState<Message>([]);
   const planContext = api.useUtils().plan;
-
-  // toggle navbar state
-  const [toggleNavbar, setToggleNavBar] = useState(false)
-
-  const handleNavigationOnClick = () => {
-    setToggleNavBar(!toggleNavbar);
-  }
-
   const [inputValue, setInputValue] = useState('');
 
   const {
@@ -68,7 +60,7 @@ const Chatbot: NextPage = () => {
 
   return (
     <Fragment>
-      <MainHeader toggleNav={handleNavigationOnClick}/>
+      <MainHeader />
       <Container>
         {(isChatMessagesLoading || isSendChatLoading) && <LoadingSpinner isLoading={isChatMessagesLoading || isSendChatLoading} />}
         <ChatWindow messages={messages} />

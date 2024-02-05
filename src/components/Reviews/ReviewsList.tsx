@@ -6,7 +6,6 @@ import { List } from "@mui/material";
 
 export default function ReviewsList({ reviewItems }: { reviewItems: Review[] | undefined }) {
     const items = reviewItems || [];
-    console.log(items)
 
     return (
         <List sx={{

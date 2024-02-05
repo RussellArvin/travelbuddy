@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { DayItemType, PlanItem } from "../../utils/types";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { RouterOutputs } from "../../utils/api";
 
 
@@ -24,16 +24,16 @@ export default function DayItem({ dayItem }: { dayItem: PlanItem }) {
     return (
         <Fragment>
             <Fragment>
-                <Grid container spacing={6} sx={{ marginBottom: "20px" }}>
+                <Grid container spacing={6} sx={{ marginBottom: "60px" }}>
                     <Grid item xs={5}>
                         <img src={imgUrl} style={{ display: 'block', width: '100%' }}></img>
                     </Grid>
                     <Grid item xs={7}>
-                        <h1>{activity}</h1>
-                        <h1>start time: {changeDateFormat(startDate)}</h1>
-                        <h1>end time: {changeDateFormat(endDate)}</h1>
-                        { isHalal && <h1>isHalal</h1>}
-                        <h1>location: {location}</h1>
+                        <Typography variant="h4">{activity}</Typography>
+                        <Typography variant="h6">start time: {changeDateFormat(startDate)}</Typography>
+                        <Typography variant="h6">end time: {changeDateFormat(endDate)}</Typography>
+                        { isHalal && <Typography variant="h6">isHalal</Typography>}
+                        <Typography variant="h6">location: {location}</Typography>
                     </Grid>
                 </Grid>
             </Fragment>

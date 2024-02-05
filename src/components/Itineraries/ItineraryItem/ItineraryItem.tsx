@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import cityImages from '../../../utils/cityImages';
+import { useRouter } from 'next/router';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#427AA1' : '##427AA1',
@@ -28,12 +29,16 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 
+
 export default function ItineraryItem(details: ItineraryItemType) {
-  const { location, startBudget, endBudget, duration, groupSize } = details
+  const router = useRouter();
+  const { id, location, startBudget, endBudget, duration, groupSize } = details
 
   return (
     <Grid item xs={4} md={4}>
-      <Item>
+      <Item onClick={() => {
+        router.push(`/plans/${id}/overview`)
+      }}>
         <Card sx={{ maxWidth: 500, height: "300px" }}>
           <CardMedia
             sx={{ height: 160 , width: "30vw"}}

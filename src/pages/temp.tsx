@@ -12,13 +12,6 @@ import { uuid } from "uuidv4";
 
 
 const temp: NextPage = () => {
-    // toggle navbar state
-    const [toggleNavbar, setToggleNavBar] = useState(false)
-
-    const handleNavigationOnClick = () => {
-        setToggleNavBar(!toggleNavbar);
-    }
-
     const tripDetailItemStyle = {
         p: 0,
         width: '100%',
@@ -91,13 +84,13 @@ const temp: NextPage = () => {
         ["Seoul", "https://static.independent.co.uk/2022/12/29/14/iStock-464629385.jpg"],
         ["Taipei", "https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Taipei_CP1125X624_1.jpg"],
         ["Tokyo", "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"],
-      ]);
+    ]);
 
     const city = "Jakarta";
 
     return (
         <Fragment>
-            <MainHeader toggleNav={handleNavigationOnClick} />
+            <MainHeader />
             <Container sx={{ margin: "1vw 2vw 0 2vw", }}>
                 <Grid container>
                     <Grid item xs={4} sx={{ border: "2px solid black" }}>

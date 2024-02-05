@@ -24,14 +24,6 @@ const Chatcopy: NextPage = () => {
         mutate: createPlanMutation,
         isLoading: isCreatePlanLoading
     } = api.plan.create.useMutation()
-
-
-    // toggle navbar state
-    const [toggleNavbar, setToggleNavBar] = useState(false)
-
-    const handleNavigationOnClick = () => {
-        setToggleNavBar(!toggleNavbar);
-    }
     
     const onSubmit = () => {
         createPlanMutation(
@@ -62,7 +54,7 @@ const Chatcopy: NextPage = () => {
    
     return (
         <Fragment>
-            <MainHeader toggleNav={handleNavigationOnClick} />
+            <MainHeader />
             <Box sx={{marginBottom: "20vh",}}>
                 <Box mx={3} sx={{ margin: "0"}}>
                     <Paper variant="outlined" sx={{ marginBottom: "0", position: "relative", border: "0" }}>
