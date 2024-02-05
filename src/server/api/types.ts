@@ -1,4 +1,4 @@
-interface Plan {
+export interface Plan {
     id:string,
     userId: string,
     city: string,
