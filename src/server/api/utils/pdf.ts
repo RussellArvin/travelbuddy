@@ -8,8 +8,8 @@ const removeFirstWord = (str: string) => {
 }
 
 const getUTCTime = (date: Date): string => {
-    const hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
 
     // Format hours and minutes to be two digits
     const formattedHours = hours.toString().padStart(2, '0');
