@@ -18,13 +18,19 @@ export const reviewRouter = createTRPCRouter({
         id: review.id,
         content:review.content,
         rating: review.rating,
-        username: user.username
+        username: user.username,
+        userId: user.id,
     })
     .from(review)
     .leftJoin(user,eq(user.id,review.userId))
     .where(eq(review.planId,planId))
 
-    return reviewData;
+
+    return {
+        reviews: reviewData,
+        hasReviewed: reviewData.some(({userId}) => userId == ctx.auth.userId)
+        //Checks if there is at least one element that matches the condition
+    }
 
   }),
   create: protectedProcedure
