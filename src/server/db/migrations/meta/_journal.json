@@ -29,6 +29,27 @@
       "when": 1707057093712,
       "tag": "0003_cold_jazinda",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1707103003876,
+      "tag": "0004_closed_shiva",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1707103607527,
+      "tag": "0005_rainy_bloodstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1707104968783,
+      "tag": "0006_last_echo",
+      "breakpoints": true
     }
   ]
 }
