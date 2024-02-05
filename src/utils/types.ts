@@ -1,6 +1,10 @@
 export interface ItineraryItemType {
-    id:number;
     location: string;
+    startBudget: number,
+    endBudget: number,
+    duration: number,
+    pax: number,
+    rating: boolean,
 }
 
 export interface DayItemType {  
