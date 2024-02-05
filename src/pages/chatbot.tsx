@@ -41,9 +41,22 @@ const Chatbot: NextPage = () => {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
         />
-        <Button variant="outlined" color="primary" onClick={sendMessage} sx={{ marginLeft: '10px' }}>
-          Send
-        </Button>
+        <Button
+  variant="outlined"
+  onClick={sendMessage}
+  sx={{
+    marginLeft: '10px',
+    color: '#05668D', // Set text color
+    borderColor: '#05668D', // Set border color
+    '&:hover': {
+      borderColor: '#05668D', // Keep border color on hover
+      backgroundColor: 'rgba(5, 102, 141, 0.04)' // Optional: Change background on hover
+    }
+  }}
+>
+  Send
+</Button>
+
       </Box>
     </Container>
   );

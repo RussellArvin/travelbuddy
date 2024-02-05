@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^4.30.4",
     "@clerk/clerk-sdk-node": "^4.13.7",
     "@clerk/nextjs": "^4.19.0",
     "@emotion/react": "^11.11.3",

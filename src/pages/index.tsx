@@ -4,6 +4,7 @@ import ItineraryList from "../components/Itineraries/ItineraryList/ItineraryList
 import { useState, useEffect } from "react";
 import { api } from "../utils/api";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { ClerkProvider } from "@clerk/clerk-react";
 
 const Home: NextPage = () => {
   const {
@@ -13,6 +14,7 @@ const Home: NextPage = () => {
 
   return (  
     <>
+      <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}>
       <MainHeader />
       {isPlansLoading ? (
         // Show loading spinner while the plans are loading
@@ -21,6 +23,7 @@ const Home: NextPage = () => {
         // Render ItineraryList once the loading is finished and planData is available
         <ItineraryList itineraries={planData!} />
       )}
+      </ClerkProvider>
     </>
   );
 };

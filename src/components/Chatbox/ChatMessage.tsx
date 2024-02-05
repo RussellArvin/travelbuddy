@@ -16,14 +16,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   const userStyle = {
     margin: '10px',
-    backgroundColor: '#e0f7fa',
+    backgroundColor: '#427aa1',
     alignSelf: 'flex-end',
     overflow: 'visible',
   };
 
   const assistantStyle = {
     margin: '10px',
-    backgroundColor: '#ffe0b2',
+    backgroundColor: '#679436',
     alignSelf: 'flex-start',
     overflow: 'visible',
   };

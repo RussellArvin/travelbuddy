@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Button, Container } from '@mui/material';
 import { useRouter } from 'next/router';
+import { SignOutButton } from "@clerk/clerk-react";
 
 
 export const MainHeader = () => {
@@ -43,9 +44,7 @@ export const MainHeader = () => {
                   },
                 }}>Find Mobile Plans</Typography>}
           </Container>
-          <Button sx={{ color: "white", border: "1px solid white" }} variant="outlined" href="#outlined-buttons">
-            Logout
-          </Button>
+          <SignOutButton/>
         </Toolbar>
       </AppBar>
     </Box>
