@@ -4,18 +4,21 @@ import { NextPage } from 'next';
 import { api, RouterOutputs } from '../../../utils/api'
 import { useRouter } from 'next/router';
 import { MainHeader } from '../../../components/Layout/MainHeader/MainHeader';
-import { DayItemType } from '../../../utils/types';
 import Day from '../../../components/Days/Day';
 import { uuid } from "uuidv4";
+import { PlanItem } from '../../../utils/types';
+
 
 
 const Overview: NextPage = () => {
     const router = useRouter()
-    const { data: planData, isLoading: isPlanDataLoading } = api.plan.findOne.useQuery({
+    const { data: planData, isLoading: isPlanDataLoading } = api.plan.getFullPlan.useQuery({
         id: router.query.id as string
     }, {
         enabled: router.isReady
     })
+
+
 
     // toggle navbar state
     const [toggleNavbar, setToggleNavBar] = useState(false)
@@ -31,53 +34,18 @@ const Overview: NextPage = () => {
         backgroundColor: 'background.paper',
     };
 
-    const DUMMY_ITINERARY: DayItemType[] = [{
-        activity: "1Check-in at Hotel",
-        day: 1,
-        isHalal: false,
-        location: "The LOOSOOASDOASD-Carlton Jakarta, Mega Kuningan",
-        startDateTime: "2024-02-06T08:00:00+8:00",
-        endDateTime: "2024-02-06T10:00:00+08:00",
-    }, {
-        activity: "2Check-asdasd at Hotel",
-        day: 1,
-        isHalal: false,
-        location: "The asdasdasdasd-Carlton Jakarta, Mega Kuningan",
-        startDateTime: "2024-02-06T10:00:00+8:00",
-        endDateTime: "2024-02-06T11:00:00+08:00",
-    }, {
-        activity: "3Check-IM COOL at Hotel",
-        day: 1,
-        isHalal: false,
-        location: "The DOG-Carlton Jakarta, Mega Kuningan",
-        startDateTime: "2024-02-06T11:00:00+8:00",
-        endDateTime: "2024-02-06T15:00:00+08:00",
-    }, {
-        activity: "4-in at Hotel",
-        day: 2,
-        isHalal: false,
-        location: "The Ritz-Carlton Jakarta, Mega Kuningan",
-        startDateTime: "2024-02-06T15:00:00+8:00",
-        endDateTime: "2024-02-06T11:00:00+08:00",
-    }, {
-        activity: "5IM ADMSJKASD-in at Hotel",
-        day: 2,
-        isHalal: false,
-        location: "The Ritz-Carlton Jakarta, Mega Kuningan",
-        startDateTime: "2024-02-06T15:00:00+8:00",
-        endDateTime: "2024-02-06T18:00:00+08:00",
-    }, {
-        activity: "6asd-in at Hotel",
-        day: 3,
-        isHalal: false,
-        location: "The BO THE BUIAS-Carlton Jakarta, Mega Kuningan",
-        startDateTime: "2024-02-06T08:00:00+8:00",
-        endDateTime: "2024-02-06T13:00:00+08:00",
-    }]
+    if(isPlanDataLoading || !planData){
+        return (
+            <>
+            <h1>Loading</h1>
+            </>
+        )
+    }
 
+    const planItems = planData.items
 
-    const groupedByDay: DayItemType[][] = DUMMY_ITINERARY.reduce(
-        (result: DayItemType[][], item: DayItemType) => {
+    const groupedByDay: PlanItem[][] = planItems.reduce(
+        (result: PlanItem[][], item: PlanItem) => {
             const dayIndex = item.day - 1; // Adjust to 0-based index
             result[dayIndex] = result[dayIndex] || []; // Initialize if undefined
             result[dayIndex]!.push(item); // Non-null assertion
@@ -86,7 +54,7 @@ const Overview: NextPage = () => {
         []
     );
 
-    const daysDisplayed = groupedByDay.map((item: DayItemType[]) => (
+    const daysDisplayed = groupedByDay.map((item: PlanItem[]) => (
         <Day key={uuid()} dayItems={item} />
     ));
 
@@ -98,7 +66,20 @@ const Overview: NextPage = () => {
         ["Tokyo", "https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"],
     ]);
 
-    const city = "Jakarta";
+    const formatDate = (date: Date): string => {
+        // Extract the parts of the date
+        let day: string | number = date.getDate();
+        let month: string | number = date.getMonth() + 1; // getMonth() returns month from 0 to 11
+        let year: string = date.getFullYear().toString().substr(-2); // Get last two digits of the year
+      
+        // Format the day and month to ensure they are in 'MM' or 'DD' format
+        day = (day < 10 ? '0' : '') + day;
+        month = (month < 10 ? '0' : '') + month;
+      
+        // Combine the parts into the final format
+        return `${month}/${day}/${year}`;
+    }
+      
 
     return (
         <Fragment>
@@ -107,13 +88,13 @@ const Overview: NextPage = () => {
                 <Grid container>
                     <Grid item xs={4} sx={{ border: "2px solid black" }}>
                         <Box sx={{ height: "256px", width: "100%" }}>
-                            <img src={countryImages.get(city)}></img>
+                            <img src={countryImages.get(planData.city)}></img>
                         </Box>
                         <List style={tripDetailItemStyle} aria-label="Trip details">
-                            <ListItem>Trip to Jakarta</ListItem>
-                            <ListItem>11/3/22 - 11/5/22</ListItem>
-                            <ListItem>3-8 Pax</ListItem>
-                            <ListItem>Budget: $1000-4000</ListItem>
+                            <ListItem>Trip to {planData.city}</ListItem>
+                            <ListItem>{formatDate(new Date(planData.startDate))}- {formatDate(new Date(planData.endDate))}</ListItem>
+                            <ListItem>{planData.groupSize} Pax</ListItem>
+                            <ListItem>Budget: ${planData.startBudget}-{planData.endBudget}</ListItem>
                         </List>
                     </Grid>
                     <Grid item xs={8}>

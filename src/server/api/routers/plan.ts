@@ -29,6 +29,49 @@ export const planRouter = createTRPCRouter({
         })
         return planData
     }),
+    getFullPlan: protectedProcedure
+    .input(z.object({
+        id:z.string()
+    }))
+    .query(async ({ctx,input})=>{
+        const planData = await db
+            .select({
+                id: plan.id,
+                userId: plan.userId,
+                startBudget: plan.startBudget,
+                endBudget: plan.endBudget,
+                startDate: plan.startDate,
+                endDate: plan.endDate,
+                city: plan.city,
+                rating: plan.rating,
+                groupSize: plan.groupSize,
+            })
+            .from(plan)
+            .where(eq(plan.id,input.id))
+
+        if(!planData[0]) throw new TRPCError({
+            code:"NOT_FOUND"
+        })
+
+        const rawPlanItems = await db
+        .select({
+            id: planItems.id,
+            activity: planItems.activity,
+            startDate: planItems.startDate,
+            endDate: planItems.endDate,
+            location: planItems.location,
+            isHalal: planItems.isHalal,
+            day: planItems.day,
+            imgUrl: planItems.imgUrl,
+        })
+        .from(planItems)
+        .where(eq(planItems.planId,input.id))
+
+        return{
+            ...planData[0],
+            items:rawPlanItems
+        }
+    }),
     findOne: protectedProcedure
     .input(
         z.object({
@@ -44,7 +87,8 @@ export const planRouter = createTRPCRouter({
                 endBudget: plan.endBudget,
                 startDate: plan.startDate,
                 endDate: plan.endDate,
-                rating: plan.rating
+                rating: plan.rating,
+                city: plan.city
             })
             .from(plan)
             .where(eq(plan.id,input.id))
@@ -78,16 +122,14 @@ export const planRouter = createTRPCRouter({
                 startDate: planItems.startDate,
                 endDate: planItems.endDate,
                 location: planItems.location,
-                isHalal: planItems.isHalal
+                isHalal: planItems.isHalal,
+                day: planItems.day,
             })
             .from(planItems)
             .where(eq(planItems.planId,input.id))
         
-        const itemData = rawPlanItems[0]
 
-        if(!itemData) throw new TRPCError({code:'NOT_FOUND'})
-
-        return itemData
+        return rawPlanItems;
     }),
     create: protectedProcedure
     .input(
