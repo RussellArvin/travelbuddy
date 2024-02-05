@@ -14,7 +14,6 @@ const Home: NextPage = () => {
 
   return (  
     <>
-      <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}>
       <MainHeader />
       {isPlansLoading ? (
         // Show loading spinner while the plans are loading
@@ -23,7 +22,6 @@ const Home: NextPage = () => {
         // Render ItineraryList once the loading is finished and planData is available
         <ItineraryList itineraries={planData!} />
       )}
-      </ClerkProvider>
     </>
   );
 };

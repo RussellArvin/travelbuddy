@@ -7,8 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Button, Container } from '@mui/material';
 import { useRouter } from 'next/router';
-import { SignOutButton } from "@clerk/clerk-react";
-
 
 export const MainHeader = () => {
   const [currentPath, setCurrentPath] = useState("");
@@ -44,7 +42,6 @@ export const MainHeader = () => {
                   },
                 }}>Find Mobile Plans</Typography>}
           </Container>
-          <SignOutButton/>
         </Toolbar>
       </AppBar>
     </Box>
